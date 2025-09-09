@@ -2,7 +2,12 @@
 import { AIProviderProps, ChatProps } from "./types";
 import ChatList from "./components/ChatList.vue";
 import AIProviderSelect from "./components/AIProviderSelect.vue";
+import MessageInput from "./components/MessageInput.vue";
 import { Icon } from "@iconify/vue";
+import { ref } from "vue";
+
+const selectedModel = ref<string>("");
+
 const items: ChatProps[] = [
   {
     id: 1,
@@ -84,10 +89,15 @@ const AIProviders: AIProviderProps[] = [
       </div>
     </div>
 
-    <div class="h-full flex-1 bg-green-300 text-blue-700">
+    <div class="flex h-full flex-1 items-center">
       <div class="flex h-full flex-1 items-center">
-        <div class="mx-auto w-[80%]">
-          <AIProviderSelect :items="AIProviders" />
+        <div class="mx-auto h-full w-[80%]">
+          <div class="flex h-[85%] items-center">
+            <AIProviderSelect :items="AIProviders" v-model="selectedModel" />
+          </div>
+          <div class="flex h-[15%] items-center">
+            <MessageInput />
+          </div>
         </div>
       </div>
     </div>

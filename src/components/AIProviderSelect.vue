@@ -17,11 +17,13 @@ import { AIProviderProps } from "../types";
 import { Icon } from "@iconify/vue";
 
 defineProps<{ items: AIProviderProps[] }>();
+
+const selectedModel = defineModel<string>();
 </script>
 
 <template>
-  <div class="provider-select">
-    <SelectRoot>
+  <div class="provider-select w-full">
+    <SelectRoot v-model="selectedModel">
       <SelectTrigger
         class="flex w-full items-center justify-between rounded-md border px-3 py-1.5 shadow-sm outline-none data-[placeholder]:text-gray-400"
       >
@@ -46,7 +48,7 @@ defineProps<{ items: AIProviderProps[] }>();
                   class="relative flex h-7 cursor-pointer items-center rounded px-6 text-green-700 outline-none data-[highlighted]:bg-green-700 data-[highlighted]:text-white"
                   v-for="(model, index) in provider.models"
                   :key="index"
-                  :value="model"
+                  :value="`${provider.id}/${model}`"
                 >
                   <SelectItemIndicator class="absolute left-2 w-6">
                     <Icon icon="radix-icons:check" />
