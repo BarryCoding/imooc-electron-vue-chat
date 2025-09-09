@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ChatProps } from "./types";
 import ChatList from "./components/ChatList.vue";
+import AIProviderSelect from "./components/AIProviderSelect.vue";
 import { Icon } from "@iconify/vue";
 const items: ChatProps[] = [
   {
@@ -60,6 +61,8 @@ const items: ChatProps[] = [
       </div>
     </div>
 
-    <div class="h-full flex-1 bg-green-300 text-blue-700">content</div>
+    <div class="h-full flex-1 bg-green-300 text-blue-700">
+      <AIProviderSelect />
+    </div>
   </div>
 </template>
