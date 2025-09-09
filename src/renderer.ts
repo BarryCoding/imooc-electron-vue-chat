@@ -1,6 +1,20 @@
-import './index.css'
+import "./index.css";
 
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import { createMemoryHistory, createRouter } from "vue-router";
+import App from "./App.vue";
+import Home from "./views/Home.vue";
+import Conversation from "./views/Chat.vue";
+import Settings from "./views/Settings.vue";
 
-createApp(App).mount('#app')
+const routes = [
+  { path: "/", component: Home },
+  { path: "/conversation", component: Conversation },
+  { path: "/settings", component: Settings },
+];
+const router = createRouter({
+  history: createMemoryHistory(),
+  routes,
+});
+
+createApp(App).use(router).mount("#app");
