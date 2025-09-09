@@ -85,7 +85,11 @@ const AIProviders: AIProviderProps[] = [
     </div>
 
     <div class="h-full flex-1 bg-green-300 text-blue-700">
-      <AIProviderSelect :items="AIProviders" />
+      <div class="flex h-full flex-1 items-center">
+        <div class="mx-auto w-[80%]">
+          <AIProviderSelect :items="AIProviders" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
