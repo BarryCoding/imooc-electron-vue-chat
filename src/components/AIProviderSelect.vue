@@ -1,30 +1,4 @@
-<template>
-  <div class="provider-select">
-    <SelectRoot>
-      <SelectTrigger>
-        <SelectValue placeholder="Select a model..." />
-      </SelectTrigger>
-
-      <SelectPortal>
-        <SelectContent>
-          <SelectViewport>
-            <SelectItem value="apple">
-              <SelectItemText> Apple </SelectItemText>
-            </SelectItem>
-            <SelectItem value="banana">
-              <SelectItemText> Banana </SelectItemText>
-            </SelectItem>
-            <SelectItem value="dog">
-              <SelectItemText> Dog </SelectItemText>
-            </SelectItem>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </SelectRoot>
-  </div>
-</template>
-
-<script lang="ts" setup>
+<script setup lang="ts">
 import {
   SelectContent,
   SelectGroup,
@@ -39,4 +13,39 @@ import {
   SelectValue,
   SelectViewport,
 } from "radix-vue";
+import { AIProviderProps } from "../types";
+
+defineProps<{ items: AIProviderProps[] }>();
 </script>
+
+<template>
+  <div class="provider-select">
+    <SelectRoot>
+      <SelectTrigger>
+        <SelectValue placeholder="Select a model..." />
+      </SelectTrigger>
+
+      <SelectPortal>
+        <SelectContent>
+          <SelectViewport>
+            <template v-for="provider in items" :key="provider.id">
+              <SelectLabel>
+                <img :src="provider.avatar" :alt="provider.name" />
+                {{ provider.name }}
+              </SelectLabel>
+              <SelectGroup>
+                <SelectItem
+                  v-for="(model, index) in provider.models"
+                  :key="index"
+                  :value="model"
+                >
+                  <SelectItemText>{{ model }}</SelectItemText>
+                </SelectItem>
+              </SelectGroup>
+            </template>
+          </SelectViewport>
+        </SelectContent>
+      </SelectPortal>
+    </SelectRoot>
+  </div>
+</template>
