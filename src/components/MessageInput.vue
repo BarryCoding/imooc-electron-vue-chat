@@ -6,7 +6,7 @@ const emit = defineEmits<{
 }>();
 const userMessage = defineModel<string>();
 const onCreate = () => {
-  if (userMessage.value.trim() !== "") {
+  if (userMessage.value && userMessage.value?.trim() !== "") {
     emit("create", userMessage.value);
   }
 };
