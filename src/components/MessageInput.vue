@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import Button from "./Button.vue";
 
 const emit = defineEmits<{
   create: [value: string];
@@ -21,12 +22,8 @@ const onCreate = () => {
       type="text"
       v-model="userMessage"
     />
-    <button
-      class="inline-flex h-[32px] items-center justify-center rounded-[4px] border border-green-700 bg-green-700 px-[15px] py-[8px] text-sm text-white shadow-sm hover:bg-green-700/90"
-      @click="onCreate"
-    >
-      <Icon icon="radix-icons:paper-plane" class="mr-2"></Icon>
+    <Button icon-name="radix-icons:paper-plane" @click="onCreate">
       发送
-    </button>
+    </Button>
   </div>
 </template>

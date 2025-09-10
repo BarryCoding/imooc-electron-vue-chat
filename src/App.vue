@@ -12,25 +12,20 @@ import { chats } from "./mocks/data";
         <ChatList :items="chats" />
       </div>
       <div class="grid h-[10%] grid-cols-2 gap-2 p-2">
-        <RouterLink
-          to="/"
-          class="inline-flex h-[32px] items-center justify-center rounded-[4px] border border-green-700 bg-green-700 px-[15px] py-[8px] text-sm text-white shadow-sm hover:bg-green-700/90"
-        >
-          <Icon icon="radix-icons:plus-circled" class="mr-2" />
-          <span>新建聊天</span>
+        <RouterLink to="/">
+          <Button icon-name="radix-icons:plus-circled" class="w-full">
+            新建聊天
+          </Button>
         </RouterLink>
-        <RouterLink
-          to="/settings"
-          class="inline-flex h-[32px] items-center justify-center rounded-[4px] border border-green-700 bg-green-50 px-[15px] py-[8px] text-sm text-green-700 shadow-sm hover:bg-green-700 hover:text-white"
-        >
-          <Icon icon="radix-icons:gear" class="mr-2"></Icon>
-          <span>应用设置</span>
+        <RouterLink to="/settings">
+          <Button icon-name="radix-icons:gear" class="w-full">
+            应用设置
+          </Button>
         </RouterLink>
       </div>
     </div>
 
     <div class="h-full flex-1">
-      <Button color="purple" plain> Hello there</Button>
       <RouterView />
     </div>
   </div>
