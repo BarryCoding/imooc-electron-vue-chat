@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { useRoute } from "vue-router";
 import MessageInput from "../components/MessageInput.vue";
 import MessageList from "../components/MessageList.vue";
 import { MessageProps } from "../types";
+import { computed } from "vue";
+
+const route = useRoute();
+const chatId = route.params.id as string;
 
 const messages: MessageProps[] = [
   {
@@ -53,12 +58,65 @@ const messages: MessageProps[] = [
     status: "loading",
     chatId: 1,
   },
+  {
+    id: 7,
+    content: "什么是光合作用",
+    createdAt: "2024-07-03",
+    updatedAt: "2024-07-03",
+    type: "question",
+    chatId: 2,
+  },
+  {
+    id: 8,
+    content: "你的说法很请正确，理解的很不错,你的说法很请正确，理解的很不错",
+    createdAt: "2024-07-03",
+    updatedAt: "2024-07-03",
+    type: "answer",
+    chatId: 2,
+  },
+  {
+    id: 9,
+    content: "请告诉我更多",
+    createdAt: "2024-07-03",
+    updatedAt: "2024-07-03",
+    type: "question",
+    chatId: 2,
+  },
+  {
+    id: 10,
+    content: "你的说法很请正确，理解的很不错,你的说法很请正确，理解的很不错",
+    createdAt: "2024-07-03",
+    updatedAt: "2024-07-03",
+    type: "answer",
+    chatId: 2,
+  },
+  {
+    id: 11,
+    content: "还有更多的信息吗",
+    createdAt: "2024-07-03",
+    type: "question",
+    updatedAt: "2024-07-03",
+    chatId: 3,
+  },
+  {
+    id: 12,
+    content: "",
+    createdAt: "2024-07-03",
+    updatedAt: "2024-07-03",
+    type: "answer",
+    status: "loading",
+    chatId: 3,
+  },
 ];
+
+const messagesByChatId = computed(() => {
+  return messages.filter((message) => message.chatId === Number(chatId));
+});
 </script>
 
 <template>
   <div class="mx-auto h-[85%] w-[80%] overflow-y-auto pt-2">
-    <MessageList :messages="messages" />
+    <MessageList :messages="messagesByChatId" />
   </div>
   <div class="mx-auto flex h-[15%] w-[80%] items-center">
     <MessageInput />

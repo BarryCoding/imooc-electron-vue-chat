@@ -4,12 +4,12 @@ import { createApp } from "vue";
 import { createMemoryHistory, createRouter } from "vue-router";
 import App from "./App.vue";
 import Home from "./views/Home.vue";
-import Conversation from "./views/Chat.vue";
+import Conversation from "./views/Chat.vue"; // TODO: rename to Chat
 import Settings from "./views/Settings.vue";
 
 const routes = [
   { path: "/", component: Home },
-  { path: "/conversation", component: Conversation },
+  { path: "/conversation/:id", component: Conversation },
   { path: "/settings", component: Settings },
 ];
 const router = createRouter({
