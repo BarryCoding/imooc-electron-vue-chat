@@ -11,7 +11,7 @@ defineProps<{ items: ChatProps[] }>();
       v-for="item in items"
       :key="item.id"
     >
-      <a href="#">
+      <RouterLink to="/conversation">
         <div
           class="flex items-center justify-between text-sm leading-5 text-gray-500"
         >
@@ -21,7 +21,7 @@ defineProps<{ items: ChatProps[] }>();
         <h2 class="truncate leading-6 font-semibold text-gray-900">
           {{ item.title }}
         </h2>
-      </a>
+      </RouterLink>
     </div>
   </div>
 </template>

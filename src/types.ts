@@ -17,3 +17,15 @@ export interface AIProviderProps {
   updatedAt: string;
   models: string[];
 }
+
+export type MessageStatus = "loading" | "streaming" | "finished";
+
+export interface MessageProps {
+  id: number;
+  content: string;
+  type: "question" | "answer";
+  chatId: number;
+  status?: MessageStatus;
+  createdAt: string;
+  updatedAt: string;
+}
