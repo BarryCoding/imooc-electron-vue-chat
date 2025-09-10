@@ -1,49 +1,14 @@
 <script setup lang="ts">
 import ChatList from "./components/ChatList.vue";
 import { Icon } from "@iconify/vue";
-import { ChatProps } from "./types";
-
-const items: ChatProps[] = [
-  {
-    id: 1,
-    selectedModel: "GPT-3.5-Turbo",
-    title: "什么是光合作用1",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    providerId: 1,
-  },
-  {
-    id: 2,
-    selectedModel: "GPT-3.5-Turbo",
-    title: "什么是光合作用",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    providerId: 1,
-  },
-  {
-    id: 3,
-    selectedModel: "GPT-3.5-Turbo",
-    title: "什么是光合作用",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    providerId: 1,
-  },
-  {
-    id: 4,
-    selectedModel: "GPT-3.5-Turbo",
-    title: "什么是光合作用, 你的说法很请正确，理解的很不错",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    providerId: 1,
-  },
-];
+import { chats } from "./mocks/data";
 </script>
 
 <template>
   <div class="flex h-screen items-center justify-between">
     <div class="h-full w-[300px] border-r border-gray-300 bg-gray-200">
       <div class="h-[90%] overflow-y-auto">
-        <ChatList :items="items" />
+        <ChatList :items="chats" />
       </div>
       <div class="grid h-[10%] grid-cols-2 gap-2 p-2">
         <RouterLink

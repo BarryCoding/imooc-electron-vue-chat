@@ -2,121 +2,38 @@
 import { useRoute } from "vue-router";
 import MessageInput from "../components/MessageInput.vue";
 import MessageList from "../components/MessageList.vue";
-import { MessageProps } from "../types";
-import { computed } from "vue";
 
+import { ref, watch, computed } from "vue";
+import { chats, messages } from "../mocks/data";
 const route = useRoute();
-const chatId = route.params.id as string;
+const currentChatId = ref<string>("");
+watch(
+  () => route.params.id,
+  (newId: string) => {
+    currentChatId.value = newId;
+  },
+);
 
-const messages: MessageProps[] = [
-  {
-    id: 1,
-    content: "什么是光合作用",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "question",
-    chatId: 1,
-  },
-  {
-    id: 2,
-    content: "你的说法很请正确，理解的很不错,你的说法很请正确，理解的很不错",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "answer",
-    chatId: 1,
-  },
-  {
-    id: 3,
-    content: "请告诉我更多",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "question",
-    chatId: 1,
-  },
-  {
-    id: 4,
-    content: "你的说法很请正确，理解的很不错,你的说法很请正确，理解的很不错",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "answer",
-    chatId: 1,
-  },
-  {
-    id: 5,
-    content: "还有更多的信息吗",
-    createdAt: "2024-07-03",
-    type: "question",
-    updatedAt: "2024-07-03",
-    chatId: 1,
-  },
-  {
-    id: 6,
-    content: "",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "answer",
-    status: "loading",
-    chatId: 1,
-  },
-  {
-    id: 7,
-    content: "什么是光合作用",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "question",
-    chatId: 2,
-  },
-  {
-    id: 8,
-    content: "你的说法很请正确，理解的很不错,你的说法很请正确，理解的很不错",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "answer",
-    chatId: 2,
-  },
-  {
-    id: 9,
-    content: "请告诉我更多",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "question",
-    chatId: 2,
-  },
-  {
-    id: 10,
-    content: "你的说法很请正确，理解的很不错,你的说法很请正确，理解的很不错",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "answer",
-    chatId: 2,
-  },
-  {
-    id: 11,
-    content: "还有更多的信息吗",
-    createdAt: "2024-07-03",
-    type: "question",
-    updatedAt: "2024-07-03",
-    chatId: 3,
-  },
-  {
-    id: 12,
-    content: "",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-    type: "answer",
-    status: "loading",
-    chatId: 3,
-  },
-];
-
-const messagesByChatId = computed(() => {
-  return messages.filter((message) => message.chatId === Number(chatId));
+const currentChat = computed(() => {
+  return chats.find((chat) => chat.id === Number(currentChatId.value));
+});
+const currentMessages = computed(() => {
+  return messages.filter(
+    (message) => message.chatId === Number(currentChatId.value),
+  );
 });
 </script>
 
 <template>
-  <div class="mx-auto h-[85%] w-[80%] overflow-y-auto pt-2">
-    <MessageList :messages="messagesByChatId" />
+  <div
+    class="flex h-[10%] items-center justify-between border-b border-gray-300 bg-gray-200 px-3"
+    v-if="currentChat"
+  >
+    <h3 class="font-semibold text-gray-900">{{ currentChat.title }}</h3>
+    <span class="text-sm text-gray-500">{{ currentChat.updatedAt }}</span>
+  </div>
+  <div class="mx-auto h-[75%] w-[80%] overflow-y-auto pt-2">
+    <MessageList :messages="currentMessages" />
   </div>
   <div class="mx-auto flex h-[15%] w-[80%] items-center">
     <MessageInput />
