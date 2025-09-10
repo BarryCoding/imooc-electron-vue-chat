@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ChatList from "./components/ChatList.vue";
+import Button from "./components/Button.vue";
 import { Icon } from "@iconify/vue";
 import { chats } from "./mocks/data";
 </script>
@@ -29,6 +30,7 @@ import { chats } from "./mocks/data";
     </div>
 
     <div class="h-full flex-1">
+      <Button color="purple" plain> Hello there</Button>
       <RouterView />
     </div>
   </div>
