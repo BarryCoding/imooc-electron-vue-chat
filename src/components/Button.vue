@@ -35,7 +35,7 @@ const {
   disabled = false,
   loading = false,
   iconName = "",
-} = withDefaults(defineProps<ButtonProps>(), {});
+} = defineProps<ButtonProps>();
 
 const colorVariants: Record<ButtonColor, any> = {
   green: {
