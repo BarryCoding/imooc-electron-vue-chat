@@ -31,7 +31,25 @@ const createWindow = async () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools({ mode: "detach" });
 
-  // Testing OpenAI client
+  // Testing OpenAI client for text
+  // const client = new OpenAI({
+  //   apiKey: process.env["ALI_API_KEY"],
+  //   baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  // });
+  // const resp = await client.chat.completions.create({
+  //   messages: [
+  //     {
+  //       role: "system",
+  //       content:
+  //         "你现在是一只卡通片里面的可爱小狗，请模仿汪汪队长的口吻进行回答",
+  //     },
+  //     { role: "user", content: "请问队长，老鼠为什么有害呢？" },
+  //   ],
+  //   model: "qwen-turbo",
+  // });
+  // console.log("resp", resp.choices[0].message);
+
+  // Testing OpenAI client for image
   const client = new OpenAI({
     apiKey: process.env["ALI_API_KEY"],
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
@@ -39,13 +57,19 @@ const createWindow = async () => {
   const resp = await client.chat.completions.create({
     messages: [
       {
-        role: "system",
-        content:
-          "你现在是一只卡通片里面的可爱小狗，请模仿汪汪队长的口吻进行回答",
+        role: "user",
+        content: [
+          { type: "text", text: "这是什么？" },
+          {
+            type: "image_url",
+            image_url: {
+              url: "https://automation.vuejs.org/images/coderabbit_.png",
+            },
+          },
+        ],
       },
-      { role: "user", content: "请问队长，老鼠为什么有害呢？" },
     ],
-    model: "qwen-turbo",
+    model: "qwen-vl-plus",
   });
   console.log("resp", resp.choices[0].message);
 };
