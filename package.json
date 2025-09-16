@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.13",
+    "dexie": "^4.2.0",
     "dotenv": "^16.4.5",
     "electron-squirrel-startup": "^1.0.1",
     "openai": "^4.55.3",
