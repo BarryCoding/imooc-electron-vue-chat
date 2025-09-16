@@ -9,7 +9,7 @@ import Settings from "./views/Settings.vue";
 
 const routes = [
   { path: "/", component: Home },
-  { path: "/conversation/:id", component: Conversation },
+  { path: "/chat/:id", component: Conversation },
   { path: "/settings", component: Settings },
 ];
 const router = createRouter({

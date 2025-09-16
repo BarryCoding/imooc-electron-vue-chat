@@ -8,7 +8,7 @@ const router = useRouter();
 const goToChat = (id: number) => {
   console.log(`🤖 ~ goToChat ~ goToChat:`, id);
   router.push({
-    path: `/conversation/${id}`,
+    path: `/chat/${id}`,
     query: { name: "viking" },
     hash: "#foo",
   });

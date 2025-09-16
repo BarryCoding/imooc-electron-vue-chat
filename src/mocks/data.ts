@@ -167,7 +167,7 @@ export const chats: ChatProps[] = [
   },
 ];
 
-export const providers: AIProviderProps[] = [
+export const mockProviders: AIProviderProps[] = [
   {
     id: 1,
     name: "文心一言",
