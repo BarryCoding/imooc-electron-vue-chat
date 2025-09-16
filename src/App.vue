@@ -1,23 +1,14 @@
 <script setup lang="ts">
 import ChatList from "./components/ChatList.vue";
 import Button from "./components/Button.vue";
-import { chats, providers } from "./mocks/data";
-import { onMounted } from "vue";
-import { db } from "./db";
+import { onMounted, ref } from "vue";
+import { db, initProviders } from "./db";
+import type { ChatProps } from "./types";
 
+const chats = ref<ChatProps[]>([]);
 onMounted(async () => {
-  // Create
-  const insertedId = await db.aiProviders.add(providers[0]);
-  console.log("insertedId", insertedId);
-  // Read
-  const items = await db.aiProviders.where({ id: 1 }).toArray();
-  console.log("items", items);
-  // Update
-  const updatedItem = await db.aiProviders.update(1, { desc: "updated desc" });
-  console.log("updatedItem", updatedItem);
-  // Delete
-  const deletedItem = await db.aiProviders.delete(1);
-  console.log("deletedItem", deletedItem);
+  await initProviders();
+  chats.value = await db.chats.toArray();
 });
 </script>
 
