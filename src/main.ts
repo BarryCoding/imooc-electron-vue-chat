@@ -1,8 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
-import "dotenv/config";
-import OpenAI from "openai";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -30,48 +28,6 @@ const createWindow = async () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools({ mode: "detach" });
-
-  // Testing OpenAI client for text
-  // const client = new OpenAI({
-  //   apiKey: process.env["ALI_API_KEY"],
-  //   baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-  // });
-  // const resp = await client.chat.completions.create({
-  //   messages: [
-  //     {
-  //       role: "system",
-  //       content:
-  //         "你现在是一只卡通片里面的可爱小狗，请模仿汪汪队长的口吻进行回答",
-  //     },
-  //     { role: "user", content: "请问队长，老鼠为什么有害呢？" },
-  //   ],
-  //   model: "qwen-turbo",
-  // });
-  // console.log("resp", resp.choices[0].message);
-
-  // Testing OpenAI client for image
-  const client = new OpenAI({
-    apiKey: process.env["ALI_API_KEY"],
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-  });
-  const resp = await client.chat.completions.create({
-    messages: [
-      {
-        role: "user",
-        content: [
-          { type: "text", text: "这是什么？" },
-          {
-            type: "image_url",
-            image_url: {
-              url: "https://automation.vuejs.org/images/coderabbit_.png",
-            },
-          },
-        ],
-      },
-    ],
-    model: "qwen-vl-plus",
-  });
-  console.log("resp", resp.choices[0].message);
 };
 
 // This method will be called when Electron has finished
