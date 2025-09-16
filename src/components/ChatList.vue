@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { ChatProps } from "../types";
+import dayjs from "dayjs";
 
 defineProps<{ items: ChatProps[] }>();
 
@@ -27,7 +28,7 @@ const goToChat = (id: number) => {
         class="flex items-center justify-between text-sm leading-5 text-gray-500"
       >
         <span>{{ item.selectedModel }}</span>
-        <span>{{ item.updatedAt }}</span>
+        <span>{{ dayjs(item.updatedAt).format("YYYY-MM-DD") }}</span>
       </div>
       <h2 class="truncate leading-6 font-semibold text-gray-900">
         {{ item.title }}

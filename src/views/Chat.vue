@@ -2,26 +2,41 @@
 import { useRoute } from "vue-router";
 import MessageInput from "../components/MessageInput.vue";
 import MessageList from "../components/MessageList.vue";
-
-import { ref, watch, computed } from "vue";
-import { chats, messages } from "../mocks/data";
+import { ref, watch, computed, onMounted } from "vue";
+import { db } from "../db";
+import { ChatProps, MessageProps } from "src/types";
 const route = useRoute();
-const currentChatId = ref<string>("");
+const currentChat = ref<ChatProps>();
+let chatId = Number(route.params.id as string);
+const currentMessages = ref<MessageProps[]>([]);
+const initMessageId = Number(route.query.init as string);
+const createInitMessage = async () => {
+  const initData: Omit<MessageProps, "id"> = {
+    content: "",
+    status: "loading",
+    type: "answer",
+    chatId,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  const messageId = await db.messages.add(initData);
+  currentMessages.value.push({ ...initData, id: messageId });
+};
+onMounted(async () => {
+  currentChat.value = await db.chats.where({ id: chatId }).first();
+  currentMessages.value = await db.messages.where({ chatId }).toArray();
+  if (initMessageId) {
+    createInitMessage();
+  }
+});
 watch(
   () => route.params.id,
-  (newId: string) => {
-    currentChatId.value = newId;
+  async (newId: string) => {
+    chatId = Number(newId);
+    currentChat.value = await db.chats.where({ id: chatId }).first();
+    currentMessages.value = await db.messages.where({ chatId }).toArray();
   },
 );
-
-const currentChat = computed(() => {
-  return chats.find((chat) => chat.id === Number(currentChatId.value));
-});
-const currentMessages = computed(() => {
-  return messages.filter(
-    (message) => message.chatId === Number(currentChatId.value),
-  );
-});
 </script>
 
 <template>
