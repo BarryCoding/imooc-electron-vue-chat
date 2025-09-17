@@ -100,7 +100,7 @@ export const messages: MessageProps[] = [
     chatId: 3,
   },
 ];
-export const chats: ChatProps[] = [
+export const mockChats: ChatProps[] = [
   {
     id: 1,
     selectedModel: "GPT-3.5-Turbo",
