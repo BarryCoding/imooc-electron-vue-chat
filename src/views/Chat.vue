@@ -4,17 +4,22 @@ import MessageInput from "../components/MessageInput.vue";
 import MessageList from "../components/MessageList.vue";
 import { ref, watch, computed, onMounted } from "vue";
 import { db } from "../db";
-import { ChatProps, MessageProps, MessageStatus } from "src/types";
+import { MessageProps } from "src/types";
 import { useChatStore } from "../stores/chat";
+import { useMessageStore } from "../stores/message";
+
 const route = useRoute();
 const chatId = ref(Number(route.params.id as string));
 const chatStore = useChatStore();
 const currentChat = computed(() =>
   chatStore.items.find((item) => item.id === chatId.value),
 );
-const currentMessages = ref<MessageProps[]>([]);
+const messageStore = useMessageStore();
+const currentMessages = computed(() => messageStore.currentMessages);
 const initMessageId = Number(route.query.init as string);
-let lastQuestion = "";
+const lastQuestion = computed(() =>
+  messageStore.currentMessages.findLast((item) => item.type === "question"),
+);
 const createInitMessage = async () => {
   const initData: Omit<MessageProps, "id"> = {
     content: "",
@@ -24,16 +29,14 @@ const createInitMessage = async () => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
-  const messageId = await db.messages.add(initData);
-  currentMessages.value.push({ ...initData, id: messageId });
+  const messageId = await messageStore.createMessage(initData);
   if (currentChat.value) {
     const currentProvider = await db.aiProviders
       .where({ id: currentChat.value.providerId })
       .first();
-    console.log(`🤖 ~ createInitMessage ~ currentProvider:`, currentProvider);
     if (currentProvider) {
       window.electronAPI.startChat({
-        content: currentChat.value.title,
+        content: lastQuestion.value?.content ?? "",
         providerName: currentProvider.name,
         selectedModel: currentChat.value.selectedModel,
         messageId,
@@ -42,45 +45,19 @@ const createInitMessage = async () => {
   }
 };
 onMounted(async () => {
-  currentMessages.value = await db.messages
-    .where({ chatId: chatId.value })
-    .toArray();
+  await messageStore.fetchMessagesByChatId(chatId.value);
   if (initMessageId) {
-    const lastMessage = await db.messages
-      .where({ chatId: chatId.value })
-      .last();
-    lastQuestion = lastMessage?.content || "";
     createInitMessage();
   }
   window.electronAPI.onUpdateMessage(async (streamData) => {
-    const { messageId, data } = streamData;
-    const currentMessage = await db.messages.where({ id: messageId }).first();
-    if (currentMessage) {
-      const updatedData = {
-        content: currentMessage.content + data.result,
-        status: data.is_end ? "finished" : "streaming",
-        updatedAt: new Date().toISOString(),
-      } as const;
-      await db.messages.update(messageId, updatedData);
-      const index = currentMessages.value.findIndex(
-        (item) => item.id === messageId,
-      );
-      if (index !== -1) {
-        currentMessages.value[index] = {
-          ...currentMessages.value[index],
-          ...updatedData,
-        };
-      }
-    }
+    messageStore.updateMessage(streamData);
   });
 });
 watch(
   () => route.params.id,
   async (newId: string) => {
     chatId.value = Number(newId);
-    currentMessages.value = await db.messages
-      .where({ chatId: chatId.value })
-      .toArray();
+    await messageStore.fetchMessagesByChatId(chatId.value);
   },
 );
 </script>
