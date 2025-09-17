@@ -5,9 +5,13 @@ import MessageList from "../components/MessageList.vue";
 import { ref, watch, computed, onMounted } from "vue";
 import { db } from "../db";
 import { ChatProps, MessageProps, MessageStatus } from "src/types";
+import { useChatStore } from "../stores/chat";
 const route = useRoute();
-const currentChat = ref<ChatProps>();
-let chatId = Number(route.params.id as string);
+const chatId = ref(Number(route.params.id as string));
+const chatStore = useChatStore();
+const currentChat = computed(() =>
+  chatStore.items.find((item) => item.id === chatId.value),
+);
 const currentMessages = ref<MessageProps[]>([]);
 const initMessageId = Number(route.query.init as string);
 let lastQuestion = "";
@@ -16,7 +20,7 @@ const createInitMessage = async () => {
     content: "",
     status: "loading",
     type: "answer",
-    chatId,
+    chatId: chatId.value,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -38,10 +42,13 @@ const createInitMessage = async () => {
   }
 };
 onMounted(async () => {
-  currentChat.value = await db.chats.where({ id: chatId }).first();
-  currentMessages.value = await db.messages.where({ chatId }).toArray();
+  currentMessages.value = await db.messages
+    .where({ chatId: chatId.value })
+    .toArray();
   if (initMessageId) {
-    const lastMessage = await db.messages.where({ chatId }).last();
+    const lastMessage = await db.messages
+      .where({ chatId: chatId.value })
+      .last();
     lastQuestion = lastMessage?.content || "";
     createInitMessage();
   }
@@ -70,9 +77,10 @@ onMounted(async () => {
 watch(
   () => route.params.id,
   async (newId: string) => {
-    chatId = Number(newId);
-    currentChat.value = await db.chats.where({ id: chatId }).first();
-    currentMessages.value = await db.messages.where({ chatId }).toArray();
+    chatId.value = Number(newId);
+    currentMessages.value = await db.messages
+      .where({ chatId: chatId.value })
+      .toArray();
   },
 );
 </script>

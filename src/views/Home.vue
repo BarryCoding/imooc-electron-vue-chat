@@ -16,9 +16,11 @@ import MessageInput from "../components/MessageInput.vue";
 import { useRouter } from "vue-router";
 import { AIProviderProps } from "src/types";
 import { db } from "../db";
+import { useChatStore } from "../stores/chat";
 const currentModel = ref("");
-
+const chatStore = useChatStore();
 const router = useRouter();
+
 const aiProviders = ref<AIProviderProps[]>([]);
 onMounted(async () => {
   aiProviders.value = await db.aiProviders.toArray();
@@ -35,7 +37,7 @@ const selectedModelInfo = computed(() => {
 const createChat = async (question: string) => {
   const { providerId, selectedModel } = selectedModelInfo.value;
   const currentDate = new Date().toISOString();
-  const chatId = await db.chats.add({
+  const chatId = await chatStore.createChat({
     title: question,
     providerId,
     selectedModel,

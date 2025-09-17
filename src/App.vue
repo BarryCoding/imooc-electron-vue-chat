@@ -2,26 +2,16 @@
 import ChatList from "./components/ChatList.vue";
 import Button from "./components/Button.vue";
 import { onMounted, computed } from "vue";
-import { db, initProviders } from "./db";
+import { initProviders } from "./db";
 import { useChatStore } from "./stores/chat";
-import { mockChats } from "./mocks/data";
 
-let index = 0;
 const chatStore = useChatStore();
 const items = computed(() => chatStore.items);
 
 onMounted(async () => {
   await initProviders();
-  chatStore.items = await db.chats.toArray();
+  await chatStore.fetchChats();
 });
-
-const testAdd = () => {
-  index++;
-  chatStore.items.push(mockChats[index]);
-};
-const testReset = () => {
-  chatStore.$reset();
-};
 </script>
 
 <template>
@@ -29,6 +19,7 @@ const testReset = () => {
     <div class="h-full w-[300px] border-r border-gray-300 bg-gray-200">
       <div class="h-[90%] overflow-y-auto">
         <ChatList :items="items" />
+        <h3>{{ chatStore.totalChats }}</h3>
       </div>
       <div class="grid h-[10%] grid-cols-2 gap-2 p-2">
         <RouterLink to="/">
@@ -41,20 +32,6 @@ const testReset = () => {
             应用设置
           </Button>
         </RouterLink>
-        <Button
-          icon-name="radix-icons:chat-bubble"
-          class="w-full"
-          @click="testAdd"
-        >
-          测试新增
-        </Button>
-        <Button
-          icon-name="radix-icons:chat-bubble"
-          class="w-full"
-          @click="testReset"
-        >
-          测试Reset
-        </Button>
       </div>
     </div>
 
