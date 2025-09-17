@@ -170,7 +170,8 @@ export const chats: ChatProps[] = [
 export const mockProviders: AIProviderProps[] = [
   {
     id: 1,
-    name: "文心一言",
+    name: "qianfan",
+    title: "百度千帆",
     desc: "文心一言 百度出品的大模型",
     models: ["ERNIE-4.0-8K", "ERNIE-3.5-8K", "ERNIE-Speed-8K"],
     avatar:
@@ -180,7 +181,8 @@ export const mockProviders: AIProviderProps[] = [
   },
   {
     id: 2,
-    name: "通义千问",
+    name: "dashscope",
+    title: "阿里灵积",
     desc: "通义千问",
     models: ["qwen-turbo", "qwen-plus", "qwen-max"],
     avatar:

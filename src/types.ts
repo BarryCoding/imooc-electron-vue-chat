@@ -36,3 +36,13 @@ export interface MessageProps {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UpdatedStreamData {
+  messageId: number;
+  data: {
+    is_end: boolean;
+    result: string;
+  };
+}
+
+export type OnUpdatedCallback = (data: UpdatedStreamData) => Promise<void>;

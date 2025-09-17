@@ -2,6 +2,8 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { CreateChatProps } from "./types";
+import OpenAI from "openai";
+import "dotenv/config";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -18,8 +20,35 @@ const createWindow = async () => {
     },
   });
 
-  ipcMain.on("start-chat", async (event, content: CreateChatProps) => {
-    console.log(`🤖 ~ createWindow ~ content:`, content);
+  // REFACTOR: SRP
+  // receive message from ipcRenderer
+  ipcMain.on("start-chat", async (event, data: CreateChatProps) => {
+    const { providerName, content, messageId, selectedModel } = data;
+    console.log(`🤖 ~ createWindow ~ providerName:`, providerName);
+    if (providerName === "dashscope") {
+      const client = new OpenAI({
+        apiKey: process.env["ALI_API_KEY"],
+        baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      });
+      const stream = await client.chat.completions.create({
+        messages: [{ role: "user", content }],
+        model: selectedModel,
+        stream: true,
+      });
+      for await (const chunk of stream) {
+        console.log(`🤖 ~ createWindow ~ chunk:`, chunk);
+        const choice = chunk.choices[0];
+        const content = {
+          messageId,
+          data: {
+            is_end: choice.finish_reason === "stop",
+            result: choice.delta.content || "",
+          },
+        };
+        // send message to ipcRenderer
+        mainWindow.webContents.send("update-message", content);
+      }
+    }
   });
 
   // and load the index.html of the app.

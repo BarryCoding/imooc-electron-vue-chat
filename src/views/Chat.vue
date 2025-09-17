@@ -45,6 +45,9 @@ onMounted(async () => {
     lastQuestion = lastMessage?.content || "";
     createInitMessage();
   }
+  window.electronAPI.onUpdateMessage(async (steamData) => {
+    console.log(`🤖 ~ steamData:`, steamData);
+  });
 });
 watch(
   () => route.params.id,
