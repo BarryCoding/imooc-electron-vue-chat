@@ -4,7 +4,7 @@ import MessageInput from "../components/MessageInput.vue";
 import MessageList from "../components/MessageList.vue";
 import { ref, watch, computed, onMounted } from "vue";
 import { db } from "../db";
-import { ChatProps, MessageProps } from "src/types";
+import { ChatProps, MessageProps, MessageStatus } from "src/types";
 const route = useRoute();
 const currentChat = ref<ChatProps>();
 let chatId = Number(route.params.id as string);
@@ -45,8 +45,26 @@ onMounted(async () => {
     lastQuestion = lastMessage?.content || "";
     createInitMessage();
   }
-  window.electronAPI.onUpdateMessage(async (steamData) => {
-    console.log(`🤖 ~ steamData:`, steamData);
+  window.electronAPI.onUpdateMessage(async (streamData) => {
+    const { messageId, data } = streamData;
+    const currentMessage = await db.messages.where({ id: messageId }).first();
+    if (currentMessage) {
+      const updatedData = {
+        content: currentMessage.content + data.result,
+        status: data.is_end ? "finished" : "streaming",
+        updatedAt: new Date().toISOString(),
+      } as const;
+      await db.messages.update(messageId, updatedData);
+      const index = currentMessages.value.findIndex(
+        (item) => item.id === messageId,
+      );
+      if (index !== -1) {
+        currentMessages.value[index] = {
+          ...currentMessages.value[index],
+          ...updatedData,
+        };
+      }
+    }
   });
 });
 watch(
