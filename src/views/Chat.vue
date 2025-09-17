@@ -10,6 +10,7 @@ const currentChat = ref<ChatProps>();
 let chatId = Number(route.params.id as string);
 const currentMessages = ref<MessageProps[]>([]);
 const initMessageId = Number(route.query.init as string);
+let lastQuestion = "";
 const createInitMessage = async () => {
   const initData: Omit<MessageProps, "id"> = {
     content: "",
@@ -21,11 +22,27 @@ const createInitMessage = async () => {
   };
   const messageId = await db.messages.add(initData);
   currentMessages.value.push({ ...initData, id: messageId });
+  if (currentChat.value) {
+    const currentProvider = await db.aiProviders
+      .where({ id: currentChat.value.providerId })
+      .first();
+    console.log(`🤖 ~ createInitMessage ~ currentProvider:`, currentProvider);
+    if (currentProvider) {
+      window.electronAPI.startChat({
+        content: currentChat.value.title,
+        providerName: currentProvider.name,
+        selectedModel: currentChat.value.selectedModel,
+        messageId,
+      });
+    }
+  }
 };
 onMounted(async () => {
   currentChat.value = await db.chats.where({ id: chatId }).first();
   currentMessages.value = await db.messages.where({ chatId }).toArray();
   if (initMessageId) {
+    const lastMessage = await db.messages.where({ chatId }).last();
+    lastQuestion = lastMessage?.content || "";
     createInitMessage();
   }
 });

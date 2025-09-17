@@ -7,6 +7,13 @@ export interface ChatProps {
   providerId: number;
 }
 
+export interface CreateChatProps {
+  content: string;
+  providerName: string;
+  selectedModel: string;
+  messageId: number;
+}
+
 export interface AIProviderProps {
   id: number;
   name: string;
