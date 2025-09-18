@@ -1,10 +1,15 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { MessageProps, UpdatedStreamData } from "../types";
 import { db } from "../db";
 
 export const useMessageStore = defineStore("message", () => {
   const currentMessages = ref<MessageProps[]>([]);
+  const isLoadingMessage = computed(() =>
+    ["loading", "streaming"].includes(
+      currentMessages.value.at(-1)?.status || "",
+    ),
+  );
 
   async function fetchMessagesByChatId(chatId: number) {
     currentMessages.value = await db.messages.where({ chatId }).toArray();
@@ -40,6 +45,7 @@ export const useMessageStore = defineStore("message", () => {
 
   return {
     currentMessages,
+    isLoadingMessage,
 
     fetchMessagesByChatId,
     createMessage,

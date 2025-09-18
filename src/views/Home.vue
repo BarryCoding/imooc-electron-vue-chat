@@ -4,7 +4,7 @@
       <AIProviderSelect :items="aiProviders" v-model="currentModel" />
     </div>
     <div class="flex h-[15%] items-center">
-      <MessageInput @create="createChat" />
+      <MessageInput @create="createChat" :disabled="!currentModel" />
     </div>
   </div>
 </template>

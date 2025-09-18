@@ -99,6 +99,10 @@ watch(
     <MessageList :messages="currentMessages" />
   </div>
   <div class="mx-auto flex h-[15%] w-[80%] items-center">
-    <MessageInput @create="sendNewMessage" v-model="inputValue" />
+    <MessageInput
+      @create="sendNewMessage"
+      v-model="inputValue"
+      :disabled="messageStore.isLoadingMessage"
+    />
   </div>
 </template>
