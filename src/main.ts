@@ -23,7 +23,7 @@ const createWindow = async () => {
   // REFACTOR: SRP
   // receive message from ipcRenderer
   ipcMain.on("start-chat", async (event, data: CreateChatProps) => {
-    const { providerName, content, messageId, selectedModel } = data;
+    const { providerName, messages, messageId, selectedModel } = data;
     console.log(`🤖 ~ createWindow ~ providerName:`, providerName);
     if (providerName === "dashscope") {
       const client = new OpenAI({
@@ -31,12 +31,11 @@ const createWindow = async () => {
         baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
       });
       const stream = await client.chat.completions.create({
-        messages: [{ role: "user", content }],
+        messages,
         model: selectedModel,
         stream: true,
       });
       for await (const chunk of stream) {
-        console.log(`🤖 ~ createWindow ~ chunk:`, chunk);
         const choice = chunk.choices[0];
         const content = {
           messageId,
@@ -45,6 +44,7 @@ const createWindow = async () => {
             result: choice.delta.content || "",
           },
         };
+        console.log(`🤖 ~ createWindow ~ content:`, content);
         // send message to ipcRenderer
         mainWindow.webContents.send("update-message", content);
       }

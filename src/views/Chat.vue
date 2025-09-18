@@ -7,7 +7,9 @@ import { db } from "../db";
 import { MessageProps } from "src/types";
 import { useChatStore } from "../stores/chat";
 import { useMessageStore } from "../stores/message";
+import { ChatCompletionMessageParam } from "openai/resources/index";
 
+const inputValue = ref("");
 const route = useRoute();
 const chatId = ref(Number(route.params.id as string));
 const chatStore = useChatStore();
@@ -16,10 +18,33 @@ const currentChat = computed(() =>
 );
 const messageStore = useMessageStore();
 const currentMessages = computed(() => messageStore.currentMessages);
-const initMessageId = Number(route.query.init as string);
-const lastQuestion = computed(() =>
-  messageStore.currentMessages.findLast((item) => item.type === "question"),
+const sendedMessages = computed(() =>
+  messageStore.currentMessages
+    .filter((message) => message.status !== "loading")
+    .map((message) => {
+      return {
+        role: message.type === "question" ? "user" : "assistant",
+        content: message.content,
+      } as ChatCompletionMessageParam;
+    }),
 );
+const initMessageId = Number(route.query.init as string);
+
+const sendNewMessage = async (question: string) => {
+  if (question) {
+    const date = new Date().toISOString();
+    await messageStore.createMessage({
+      content: question,
+      chatId: chatId.value,
+      createdAt: date,
+      updatedAt: date,
+      type: "question",
+    });
+    inputValue.value = "";
+    createInitMessage();
+  }
+};
+
 const createInitMessage = async () => {
   const initData: Omit<MessageProps, "id"> = {
     content: "",
@@ -36,7 +61,7 @@ const createInitMessage = async () => {
       .first();
     if (currentProvider) {
       window.electronAPI.startChat({
-        content: lastQuestion.value?.content ?? "",
+        messages: sendedMessages.value,
         providerName: currentProvider.name,
         selectedModel: currentChat.value.selectedModel,
         messageId,
@@ -74,6 +99,6 @@ watch(
     <MessageList :messages="currentMessages" />
   </div>
   <div class="mx-auto flex h-[15%] w-[80%] items-center">
-    <MessageInput />
+    <MessageInput @create="sendNewMessage" v-model="inputValue" />
   </div>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import Button from "./Button.vue";
 
 const emit = defineEmits<{

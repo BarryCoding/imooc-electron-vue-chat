@@ -1,3 +1,5 @@
+import { ChatCompletionMessageParam } from "openai/resources/chat";
+
 export interface ChatProps {
   id: number;
   title: string;
@@ -8,7 +10,7 @@ export interface ChatProps {
 }
 
 export interface CreateChatProps {
-  content: string;
+  messages: Array<ChatCompletionMessageParam>;
   providerName: string;
   selectedModel: string;
   messageId: number;
