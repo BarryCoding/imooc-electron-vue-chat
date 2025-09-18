@@ -10,21 +10,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import AIProviderSelect from "../components/AIProviderSelect.vue";
 import MessageInput from "../components/MessageInput.vue";
 import { useRouter } from "vue-router";
-import { AIProviderProps } from "src/types";
-import { db } from "../db";
 import { useChatStore } from "../stores/chat";
+import { useAiProviderStore } from "../stores/ai-provider";
+import { useMessageStore } from "../stores/message";
+
 const currentModel = ref("");
 const chatStore = useChatStore();
 const router = useRouter();
-
-const aiProviders = ref<AIProviderProps[]>([]);
-onMounted(async () => {
-  aiProviders.value = await db.aiProviders.toArray();
-});
+const aiProviderStore = useAiProviderStore();
+const aiProviders = computed(() => aiProviderStore.items);
+const messageStore = useMessageStore();
 
 const selectedModelInfo = computed(() => {
   const [providerId, selectedModel] = currentModel.value.split("/");
@@ -44,13 +43,14 @@ const createChat = async (question: string) => {
     createdAt: currentDate,
     updatedAt: currentDate,
   });
-  const messageId = await db.messages.add({
+  const messageId = await messageStore.createMessage({
     content: question,
     type: "question",
     chatId,
     createdAt: currentDate,
     updatedAt: currentDate,
   });
+  chatStore.setCurrentChatId(chatId);
   router.push(`/chat/${chatId}?init=${messageId}`);
 };
 </script>

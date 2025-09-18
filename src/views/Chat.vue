@@ -3,13 +3,14 @@ import { useRoute } from "vue-router";
 import MessageInput from "../components/MessageInput.vue";
 import MessageList from "../components/MessageList.vue";
 import { ref, watch, computed, onMounted } from "vue";
-import { db } from "../db";
 import { MessageProps } from "src/types";
 import { useChatStore } from "../stores/chat";
 import { useMessageStore } from "../stores/message";
 import { ChatCompletionMessageParam } from "openai/resources/index";
+import { useAiProviderStore } from "../stores/ai-provider";
 
 const inputValue = ref("");
+const aiProviderStore = useAiProviderStore();
 const route = useRoute();
 const chatId = ref(Number(route.params.id as string));
 const chatStore = useChatStore();
@@ -56,9 +57,9 @@ const createInitMessage = async () => {
   };
   const messageId = await messageStore.createMessage(initData);
   if (currentChat.value) {
-    const currentProvider = await db.aiProviders
-      .where({ id: currentChat.value.providerId })
-      .first();
+    const currentProvider = aiProviderStore.items.find(
+      (item) => item.id === currentChat.value?.providerId,
+    );
     if (currentProvider) {
       window.electronAPI.startChat({
         messages: sendedMessages.value,

@@ -4,12 +4,15 @@ import Button from "./components/Button.vue";
 import { onMounted, computed } from "vue";
 import { initProviders } from "./db";
 import { useChatStore } from "./stores/chat";
+import { useAiProviderStore } from "./stores/ai-provider";
 
 const chatStore = useChatStore();
 const items = computed(() => chatStore.items);
+const aiProviderStore = useAiProviderStore();
 
 onMounted(async () => {
   await initProviders();
+  await aiProviderStore.fetchAiProviders();
   await chatStore.fetchChats();
 });
 </script>
