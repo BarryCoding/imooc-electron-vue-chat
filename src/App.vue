@@ -19,7 +19,6 @@ onMounted(async () => {
     <div class="h-full w-[300px] border-r border-gray-300 bg-gray-200">
       <div class="h-[90%] overflow-y-auto">
         <ChatList :items="items" />
-        <h3>{{ chatStore.totalChats }}</h3>
       </div>
       <div class="grid h-[10%] grid-cols-2 gap-2 p-2">
         <RouterLink to="/">

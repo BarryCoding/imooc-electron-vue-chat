@@ -2,16 +2,17 @@
 import { useRouter } from "vue-router";
 import { ChatProps } from "../types";
 import dayjs from "dayjs";
+import { useChatStore } from "../stores/chat";
 
 defineProps<{ items: ChatProps[] }>();
 
 const router = useRouter();
+const chatStore = useChatStore();
+
 const goToChat = (id: number) => {
-  console.log(`🤖 ~ goToChat ~ goToChat:`, id);
+  chatStore.setCurrentChatId(id);
   router.push({
     path: `/chat/${id}`,
-    query: { name: "viking" },
-    hash: "#foo",
   });
 };
 </script>
@@ -19,7 +20,10 @@ const goToChat = (id: number) => {
 <template>
   <div class="conversation-list">
     <div
-      class="item cursor-pointer border-t border-gray-300 bg-white p-2 hover:bg-gray-200"
+      :class="{
+        'bg-gray-100 hover:bg-gray-300': chatStore.currentChatId === item.id,
+        'bg-white hover:bg-gray-200': chatStore.currentChatId !== item.id,
+      }"
       v-for="item in items"
       :key="item.id"
       @click="goToChat(item.id)"

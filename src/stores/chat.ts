@@ -1,12 +1,15 @@
 import { defineStore } from "pinia";
 import { ChatProps } from "../types";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { db } from "../db";
 
 export const useChatStore = defineStore("chat", () => {
   const items = ref<ChatProps[]>([]);
+  const currentChatId = ref<number>(-1);
 
-  const totalChats = computed(() => items.value.length);
+  const setCurrentChatId = (id: number) => {
+    currentChatId.value = id;
+  };
 
   async function fetchChats() {
     items.value = await db.chats.toArray();
@@ -20,7 +23,8 @@ export const useChatStore = defineStore("chat", () => {
 
   return {
     items,
-    totalChats,
+    currentChatId,
+    setCurrentChatId,
 
     createChat,
     fetchChats,
