@@ -5,13 +5,19 @@ import VueMarkdown from "vue-markdown-render";
 import { Icon } from "@iconify/vue";
 import { MessageProps } from "../types";
 import markdownItHighlight from "markdown-it-highlightjs";
+import { ref } from "vue";
 const plugins = [markdownItHighlight];
+
+const scrollRef = ref<HTMLDivElement>();
+defineExpose({
+  ref: scrollRef,
+});
 
 defineProps<{ messages: MessageProps[] }>();
 </script>
 
 <template>
-  <div class="message-list">
+  <div class="message-list" ref="scrollRef">
     <div
       class="message-item mb-3"
       v-for="message in messages"

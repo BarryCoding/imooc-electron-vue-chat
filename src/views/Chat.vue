@@ -2,13 +2,14 @@
 import { useRoute } from "vue-router";
 import MessageInput from "../components/MessageInput.vue";
 import MessageList from "../components/MessageList.vue";
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted, nextTick } from "vue";
 import { MessageProps } from "src/types";
 import { useChatStore } from "../stores/chat";
 import { useMessageStore } from "../stores/message";
 import { ChatCompletionMessageParam } from "openai/resources/index";
 import { useAiProviderStore } from "../stores/ai-provider";
 
+const scrollRef = ref<{ ref: HTMLDivElement }>();
 const inputValue = ref("");
 const aiProviderStore = useAiProviderStore();
 const route = useRoute();
@@ -30,6 +31,13 @@ const sendedMessages = computed(() =>
     }),
 );
 const initMessageId = Number(route.query.init as string);
+
+const messageScrollToBottom = async () => {
+  await nextTick();
+  if (scrollRef.value) {
+    scrollRef.value.ref.scrollIntoView({ block: "end", behavior: "smooth" });
+  }
+};
 
 const sendNewMessage = async (question: string) => {
   if (question) {
@@ -72,6 +80,7 @@ const createInitMessage = async () => {
 };
 onMounted(async () => {
   await messageStore.fetchMessagesByChatId(chatId.value);
+  await messageScrollToBottom();
   if (initMessageId) {
     createInitMessage();
   }
@@ -84,6 +93,7 @@ watch(
   async (newId: string) => {
     chatId.value = Number(newId);
     await messageStore.fetchMessagesByChatId(chatId.value);
+    await messageScrollToBottom();
   },
 );
 </script>
@@ -97,7 +107,7 @@ watch(
     <span class="text-sm text-gray-500">{{ currentChat.updatedAt }}</span>
   </div>
   <div class="mx-auto h-[75%] w-[80%] overflow-y-auto pt-2">
-    <MessageList :messages="currentMessages" />
+    <MessageList :messages="currentMessages" ref="scrollRef" />
   </div>
   <div class="mx-auto flex h-[15%] w-[80%] items-center">
     <MessageInput
