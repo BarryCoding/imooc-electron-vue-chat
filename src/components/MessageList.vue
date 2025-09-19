@@ -1,7 +1,11 @@
+<script lang="ts"></script>
+
 <script setup lang="ts">
 import VueMarkdown from "vue-markdown-render";
 import { Icon } from "@iconify/vue";
 import { MessageProps } from "../types";
+import markdownItHighlight from "markdown-it-highlightjs";
+const plugins = [markdownItHighlight];
 
 defineProps<{ messages: MessageProps[] }>();
 </script>
@@ -36,9 +40,9 @@ defineProps<{ messages: MessageProps[] }>();
             </template>
             <div
               v-else
-              class="prose prose-slate prose-headings:my-2 prose-p:my-1 prose-ul:my-1 prose-li:my-0 prose-hr:my-1"
+              class="prose prose-slate prose-headings:my-2 prose-p:my-1 prose-pre:p-0 prose-ul:my-1 prose-li:my-0 prose-hr:my-1"
             >
-              <VueMarkdown :source="message.content" />
+              <VueMarkdown :source="message.content" :plugins="plugins" />
             </div>
           </div>
         </div>
