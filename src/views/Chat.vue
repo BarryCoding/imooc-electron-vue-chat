@@ -32,10 +32,10 @@ const sendedMessages = computed(() =>
 );
 const initMessageId = Number(route.query.init as string);
 
-const messageScrollToBottom = async () => {
+const messageScrollToBottom = async (behavior: ScrollBehavior = "smooth") => {
   await nextTick();
   if (scrollRef.value) {
-    scrollRef.value.ref.scrollIntoView({ block: "end", behavior: "smooth" });
+    scrollRef.value.ref.scrollIntoView({ block: "end", behavior });
   }
 };
 
@@ -64,6 +64,7 @@ const createInitMessage = async () => {
     updatedAt: new Date().toISOString(),
   };
   const messageId = await messageStore.createMessage(initData);
+  await messageScrollToBottom();
   if (currentChat.value) {
     const currentProvider = aiProviderStore.items.find(
       (item) => item.id === currentChat.value?.providerId,
@@ -80,12 +81,28 @@ const createInitMessage = async () => {
 };
 onMounted(async () => {
   await messageStore.fetchMessagesByChatId(chatId.value);
-  await messageScrollToBottom();
+  await messageScrollToBottom("instant");
   if (initMessageId) {
     createInitMessage();
   }
+  // TODO: 检查消息是否结束，如果结束，则重置高度
+  // 方案一：watch 监听消息列表高度变化
+  let currentMessageListHeight = 0;
+  const checkAndScrollToBottom = async () => {
+    if (scrollRef.value) {
+      const newHeight = scrollRef.value.ref.clientHeight;
+      console.log("the current Height", currentMessageListHeight);
+      console.log("the new Height", newHeight);
+      if (newHeight > currentMessageListHeight) {
+        console.log("scroll to bottom");
+        currentMessageListHeight = newHeight;
+        await messageScrollToBottom();
+      }
+    }
+  };
   window.electronAPI.onUpdateMessage(async (streamData) => {
     messageStore.updateMessage(streamData);
+    await checkAndScrollToBottom();
   });
 });
 watch(
@@ -93,7 +110,7 @@ watch(
   async (newId: string) => {
     chatId.value = Number(newId);
     await messageStore.fetchMessagesByChatId(chatId.value);
-    await messageScrollToBottom();
+    await messageScrollToBottom("instant");
   },
 );
 </script>
