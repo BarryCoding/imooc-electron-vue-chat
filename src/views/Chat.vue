@@ -3,10 +3,9 @@ import { useRoute } from "vue-router";
 import MessageInput from "../components/MessageInput.vue";
 import MessageList from "../components/MessageList.vue";
 import { ref, watch, computed, onMounted, nextTick } from "vue";
-import { MessageProps } from "src/types";
+import { MessageProps, MessageStatus } from "src/types";
 import { useChatStore } from "../stores/chat";
 import { useMessageStore } from "../stores/message";
-import { ChatCompletionMessageParam } from "openai/resources/index";
 import { useAiProviderStore } from "../stores/ai-provider";
 
 const scrollRef = ref<{ ref: HTMLDivElement }>();
@@ -40,8 +39,19 @@ const messageScrollToBottom = async (behavior: ScrollBehavior = "smooth") => {
   }
 };
 
-const sendNewMessage = async (question: string) => {
+// REFACTOR: not DRY
+const sendNewMessage = async (question: string, imagePath?: string) => {
   if (question) {
+    let copiedImagePath: string | undefined;
+    if (imagePath) {
+      try {
+        copiedImagePath =
+          await window.electronAPI.copyImageToUserDir(imagePath);
+        console.log("copiedImagePath", copiedImagePath);
+      } catch (error) {
+        console.error("Failed to copy image:", error);
+      }
+    }
     const date = new Date().toISOString();
     await messageStore.createMessage({
       content: question,
@@ -49,6 +59,7 @@ const sendNewMessage = async (question: string) => {
       createdAt: date,
       updatedAt: date,
       type: "question",
+      ...(copiedImagePath && { imagePath: copiedImagePath }),
     });
     inputValue.value = "";
     createInitMessage();
@@ -80,6 +91,8 @@ const createInitMessage = async () => {
     }
   }
 };
+let currentMessageListHeight = 0;
+let streamContent = "";
 onMounted(async () => {
   await messageStore.fetchMessagesByChatId(chatId.value);
   await messageScrollToBottom("instant");
@@ -88,7 +101,7 @@ onMounted(async () => {
   }
   // TODO: 检查消息是否结束，如果结束，则重置高度
   // 方案一：watch 监听消息列表高度变化
-  let currentMessageListHeight = 0;
+
   const checkAndScrollToBottom = async () => {
     if (scrollRef.value) {
       const newHeight = scrollRef.value.ref.clientHeight;
@@ -102,8 +115,18 @@ onMounted(async () => {
     }
   };
   window.electronAPI.onUpdateMessage(async (streamData) => {
-    messageStore.updateMessage(streamData);
+    const { messageId, data } = streamData;
+    streamContent += data.result;
+    const updatedData = {
+      content: streamContent,
+      status: (data.is_end ? "finished" : "streaming") as MessageStatus,
+      updatedAt: new Date().toISOString(),
+    };
+    await messageStore.updateMessage(messageId, updatedData);
     await checkAndScrollToBottom();
+    if (data.is_end) {
+      streamContent = "";
+    }
   });
 });
 watch(
@@ -111,6 +134,7 @@ watch(
   async (newId: string) => {
     chatId.value = Number(newId);
     await messageStore.fetchMessagesByChatId(chatId.value);
+    currentMessageListHeight = 0;
     await messageScrollToBottom("instant");
   },
 );
@@ -118,16 +142,16 @@ watch(
 
 <template>
   <div
-    class="flex h-[10%] items-center justify-between border-b border-gray-300 bg-gray-200 px-3"
+    class="flex h-[10%] items-center justify-between border-b border-gray-300 bg-gray-200 px-[5%]"
     v-if="currentChat"
   >
     <h3 class="font-semibold text-gray-900">{{ currentChat.title }}</h3>
     <span class="text-sm text-gray-500">{{ currentChat.updatedAt }}</span>
   </div>
-  <div class="mx-auto h-[75%] w-[80%] overflow-y-auto pt-2">
+  <div class="mx-auto h-[75%] w-full overflow-y-auto px-[5%] pt-2">
     <MessageList :messages="currentMessages" ref="scrollRef" />
   </div>
-  <div class="mx-auto flex h-[15%] w-[80%] items-center">
+  <div class="mx-auto flex h-[15%] w-[90%] items-center">
     <MessageInput
       @create="sendNewMessage"
       v-model="inputValue"

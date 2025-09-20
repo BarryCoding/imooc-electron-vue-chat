@@ -17,12 +17,8 @@ defineProps<{ messages: MessageProps[] }>();
 </script>
 
 <template>
-  <div class="message-list" ref="scrollRef">
-    <div
-      class="message-item mb-3"
-      v-for="message in messages"
-      :key="message.id"
-    >
+  <div class="message-list flex flex-col gap-3" ref="scrollRef">
+    <div class="message-item" v-for="message in messages" :key="message.id">
       <div class="flex" :class="{ 'justify-end': message.type === 'question' }">
         <div>
           <div

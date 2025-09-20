@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
-import { MessageProps, UpdatedStreamData } from "../types";
+import { MessageProps } from "../types";
 import { db } from "../db";
 
 export const useMessageStore = defineStore("message", () => {
@@ -21,25 +21,19 @@ export const useMessageStore = defineStore("message", () => {
     return id;
   }
 
-  async function updateMessage(streamData: UpdatedStreamData) {
-    const { messageId, data } = streamData;
-    const currentMessage = await db.messages.where({ id: messageId }).first();
-    if (currentMessage) {
-      const updatedData = {
-        content: currentMessage.content + data.result,
-        status: data.is_end ? "finished" : "streaming",
-        updatedAt: new Date().toISOString(),
-      } as const;
-      await db.messages.update(messageId, updatedData);
-      const index = currentMessages.value.findIndex(
-        (item) => item.id === messageId,
-      );
-      if (index !== -1) {
-        currentMessages.value[index] = {
-          ...currentMessages.value[index],
-          ...updatedData,
-        };
-      }
+  async function updateMessage(
+    messageId: number,
+    updatedData: Partial<MessageProps>,
+  ) {
+    await db.messages.update(messageId, updatedData);
+    const index = currentMessages.value.findIndex(
+      (item) => item.id === messageId,
+    );
+    if (index !== -1) {
+      currentMessages.value[index] = {
+        ...currentMessages.value[index],
+        ...updatedData,
+      };
     }
   }
 
