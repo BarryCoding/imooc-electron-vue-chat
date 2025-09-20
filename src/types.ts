@@ -7,8 +7,14 @@ export interface ChatProps {
   providerId: number;
 }
 
+export interface ChatMessageProps {
+  role: string;
+  content: string;
+  imagePath?: string;
+}
+
 export interface CreateChatProps {
-  messages: { role: string; content: string; imagePath?: string }[];
+  messages: ChatMessageProps[];
   providerName: string;
   selectedModel: string;
   messageId: number;

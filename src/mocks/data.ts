@@ -100,6 +100,7 @@ export const messages: MessageProps[] = [
     chatId: 3,
   },
 ];
+
 export const mockChats: ChatProps[] = [
   {
     id: 1,
@@ -168,17 +169,6 @@ export const mockChats: ChatProps[] = [
 ];
 
 export const mockProviders: AIProviderProps[] = [
-  {
-    id: 1,
-    name: "qianfan",
-    title: "百度千帆",
-    desc: "文心一言 百度出品的大模型",
-    models: ["ERNIE-4.0-8K", "ERNIE-3.5-8K", "ERNIE-Speed-8K"],
-    avatar:
-      "https://qph.cf2.poecdn.net/main-thumb-pb-3004-50-jougqzjtwfqfyqprxbdwofvnwattmtrg.jpeg",
-    createdAt: "2024-07-03",
-    updatedAt: "2024-07-03",
-  },
   {
     id: 2,
     name: "dashscope",
