@@ -33,9 +33,18 @@ const selectedModelInfo = computed(() => {
   };
 });
 
-const createChat = async (question: string) => {
+const createChat = async (question: string, filePath?: string) => {
   const { providerId, selectedModel } = selectedModelInfo.value;
   const currentDate = new Date().toISOString();
+  let copiedImagePath: string | undefined;
+  if (filePath) {
+    try {
+      copiedImagePath = await window.electronAPI.copyImageToUserDir(filePath);
+      console.log(`🤖 ~ createChat ~ copiedImagePath:`, copiedImagePath);
+    } catch (error) {
+      console.error("Failed to copy image:", error);
+    }
+  }
   const chatId = await chatStore.createChat({
     title: question,
     providerId,
@@ -49,6 +58,7 @@ const createChat = async (question: string) => {
     chatId,
     createdAt: currentDate,
     updatedAt: currentDate,
+    ...(copiedImagePath && { imagePath: copiedImagePath }),
   });
   chatStore.setCurrentChatId(chatId);
   router.push(`/chat/${chatId}?init=${messageId}`);

@@ -8,16 +8,17 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  create: [value: string];
+  create: [value: string, filePath?: string];
 }>();
 
 const userMessage = defineModel<string>();
 const imagePreview = ref("");
+let selectedImage: File | null = null;
 
 const handleImageUpload = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
-    const selectedImage = target.files[0];
+    selectedImage = target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(selectedImage);
     reader.onload = (e) => {
@@ -29,7 +30,14 @@ const handleImageUpload = (event: Event) => {
 };
 const onCreate = () => {
   if (userMessage.value && userMessage.value?.trim() !== "") {
-    emit("create", userMessage.value);
+    if (selectedImage) {
+      const filePath = window.electronAPI.getFilePath(selectedImage);
+      emit("create", userMessage.value, filePath);
+    } else {
+      emit("create", userMessage.value);
+    }
+    selectedImage = null;
+    imagePreview.value = "";
   }
 };
 </script>
