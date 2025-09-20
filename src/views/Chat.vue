@@ -27,7 +27,8 @@ const sendedMessages = computed(() =>
       return {
         role: message.type === "question" ? "user" : "assistant",
         content: message.content,
-      } as ChatCompletionMessageParam;
+        ...(message.imagePath && { imagePath: message.imagePath }),
+      };
     }),
 );
 const initMessageId = Number(route.query.init as string);

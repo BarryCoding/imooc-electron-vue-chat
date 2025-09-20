@@ -184,7 +184,7 @@ export const mockProviders: AIProviderProps[] = [
     name: "dashscope",
     title: "阿里灵积",
     desc: "通义千问",
-    models: ["qwen-turbo", "qwen-plus", "qwen-max"],
+    models: ["qwen-turbo", "qwen-plus", "qwen-max", "qwen-vl-plus"],
     avatar:
       "https://qph.cf2.poecdn.net/main-thumb-pb-3004-50-jougqzjtwfqfyqprxbdwofvnwattmtrg.jpeg",
     createdAt: "2024-07-03",

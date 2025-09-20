@@ -5,6 +5,7 @@ import { CreateChatProps } from "./types";
 import OpenAI from "openai";
 import "dotenv/config";
 import fs from "node:fs/promises";
+import { convertMessages } from "./helper";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -48,13 +49,15 @@ const createWindow = async () => {
   // receive message from ipcRenderer
   ipcMain.on("start-chat", async (event, data: CreateChatProps) => {
     const { providerName, messages, messageId, selectedModel } = data;
+    const convertedMessages = await convertMessages(messages);
+    console.log(`🤖 ~ createWindow ~ convertedMessages:`, convertedMessages);
     if (providerName === "dashscope") {
       const client = new OpenAI({
         apiKey: process.env["ALI_API_KEY"],
         baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
       });
       const stream = await client.chat.completions.create({
-        messages,
+        messages: convertedMessages as any, // TODO: fix this DataType
         model: selectedModel,
         stream: true,
       });
