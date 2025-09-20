@@ -35,6 +35,12 @@ defineProps<{ messages: MessageProps[] }>();
             class="message-question rounded-md bg-green-700 p-2 text-white"
             v-if="message.type === 'question'"
           >
+            <img
+              v-if="message.imagePath"
+              :src="`safe-file://${message.imagePath}`"
+              alt="Message image"
+              class="block h-24 w-24 rounded object-cover"
+            />
             {{ message.content }}
           </div>
           <div

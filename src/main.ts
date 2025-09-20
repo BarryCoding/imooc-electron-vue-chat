@@ -1,10 +1,11 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, net, protocol } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { CreateChatProps } from "./types";
 import OpenAI from "openai";
 import "dotenv/config";
 import fs from "node:fs/promises";
+import url from "node:url";
 import { convertMessages } from "./helper";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -43,6 +44,27 @@ const createWindow = async () => {
 
     // Return the destination path of the copied image
     return destPath;
+  });
+
+  // REFACTOR: SRP
+  protocol.handle("safe-file", async (request) => {
+    const filePath = decodeURIComponent(
+      request.url.slice("safe-file://".length),
+    );
+
+    // understanding the raw approach:
+    // const data = await fs.readFile(filePath)
+    // return new Response(data, {
+    //   status: 200,
+    //   headers: {
+    //     'Content-Type': lookup(filePath) as string
+    //   }
+    // })
+
+    // url and net approach
+    const newFilePath = url.pathToFileURL(filePath).toString();
+    console.log(`🤖 ~ createWindow ~ newFilePath:`, newFilePath);
+    return net.fetch(newFilePath);
   });
 
   // REFACTOR: SRP
