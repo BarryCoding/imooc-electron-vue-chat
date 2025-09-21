@@ -53,3 +53,8 @@ export interface UpdatedStreamData {
 }
 
 export type OnUpdatedCallback = (data: UpdatedStreamData) => Promise<void>;
+
+export interface UniversalChunkProps {
+  is_end: boolean;
+  result: string;
+}
