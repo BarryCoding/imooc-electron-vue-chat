@@ -35,7 +35,7 @@ const selectedModel = defineModel<string>();
         <SelectContent class="z-[100] rounded-md border bg-white shadow-md">
           <SelectViewport>
             <template v-for="(provider, index) in items" :key="provider.id">
-              <SelectLabel>
+              <SelectLabel class="flex h-7 items-center px-6 text-gray-500">
                 <img
                   :src="provider.avatar"
                   :alt="provider.name"

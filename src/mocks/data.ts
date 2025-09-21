@@ -176,8 +176,21 @@ export const mockProviders: AIProviderProps[] = [
     desc: "通义千问",
     models: ["qwen-turbo", "qwen-plus", "qwen-max", "qwen-vl-plus"],
     avatar:
-      "https://qph.cf2.poecdn.net/main-thumb-pb-3004-50-jougqzjtwfqfyqprxbdwofvnwattmtrg.jpeg",
+      "https://qph.cf2.poecdn.net/main-thumb-pb-4160791-200-qlqunomdvkyitpedtghnhsgjlutapgfl.jpeg",
     createdAt: "2024-07-03",
     updatedAt: "2024-07-03",
+  },
+
+  {
+    id: 3,
+    name: "deepseek",
+    title: "DeepSeek",
+    desc: "DeepSeek",
+    // https://api-docs.deepseek.com/zh-cn/
+    models: ["deepseek-chat"],
+    avatar:
+      "https://qph.cf2.poecdn.net/main-thumb-pb-4981273-200-phhqenmywlkiybehuaqvsxpfekviajex.jpeg",
+    createdAt: "2024-12-27",
+    updatedAt: "2024-12-27",
   },
 ];
