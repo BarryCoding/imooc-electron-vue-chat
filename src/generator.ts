@@ -28,10 +28,48 @@ const range = {
   },
 };
 
-const run = () => {
+const runWithIterator = () => {
+  console.log(`🤖 ~ runWithIterator:`);
   for (const item of range) {
     console.log("item", item);
   }
 };
 
-run();
+runWithIterator();
+
+// Using a generator function to implement iteration
+// A generator function (denoted by the * syntax) can pause and resume execution, yielding multiple values over time.
+function* generator() {
+  yield 3;
+  yield 2;
+  yield 1;
+}
+
+const gen = generator();
+console.log(`🤖 ~ run generator:`);
+for (const item of gen) {
+  console.log("item", item);
+}
+
+const rangeWithGenerator = {
+  from: 6,
+  to: 10,
+  // The * before [Symbol.iterator] makes this a generator method.
+  // When for...of is used, this generator runs, yielding values from 'from' to 'to'.
+  *[Symbol.iterator]() {
+    // The generator maintains its own internal state between yields.
+    for (let i = this.from; i <= this.to; i++) {
+      yield i; // 'yield' pauses the generator and returns the value to the iterator consumer.
+    }
+    // When the loop ends, the generator finishes and 'done: true' is returned by the iterator.
+  },
+};
+
+const runWithGenerator = () => {
+  console.log(`🤖 ~ runWithGenerator:`);
+  for (const item of rangeWithGenerator) {
+    console.log("item", item);
+  }
+};
+
+runWithGenerator();
