@@ -3,6 +3,6 @@ export abstract class BaseProvider {
   abstract chat(
     messages: ChatMessageProps[],
     modelName: string,
-  ): Promise<unknown>;
+  ): Promise<AsyncIterable<UniversalChunkProps>>;
   protected abstract transformResponse(chunk: unknown): UniversalChunkProps;
 }

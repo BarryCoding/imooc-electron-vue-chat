@@ -2,11 +2,10 @@ import { app, BrowserWindow, ipcMain, net, protocol } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
 import { CreateChatProps } from "./types";
-import OpenAI from "openai";
 import "dotenv/config";
 import fs from "node:fs/promises";
 import url from "node:url";
-import { convertMessages } from "./helper";
+import { createProvider } from "./ai-providers";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -71,31 +70,16 @@ const createWindow = async () => {
   // receive message from ipcRenderer
   ipcMain.on("start-chat", async (event, data: CreateChatProps) => {
     const { providerName, messages, messageId, selectedModel } = data;
-    const convertedMessages = await convertMessages(messages);
-    console.log(`🤖 ~ createWindow ~ convertedMessages:`, convertedMessages);
-    if (providerName === "dashscope") {
-      const client = new OpenAI({
-        apiKey: process.env["ALI_API_KEY"],
-        baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-      });
-      const stream = await client.chat.completions.create({
-        messages: convertedMessages as any, // TODO: fix this DataType
-        model: selectedModel,
-        stream: true,
-      });
-      for await (const chunk of stream) {
-        const choice = chunk.choices[0];
-        const content = {
-          messageId,
-          data: {
-            is_end: choice.finish_reason === "stop",
-            result: choice.delta.content || "",
-          },
-        };
-        console.log(`🤖 ~ createWindow ~ content:`, content);
-        // send message to ipcRenderer
-        mainWindow.webContents.send("update-message", content);
-      }
+    const provider = createProvider(providerName);
+    const stream = await provider.chat(messages, selectedModel);
+    for await (const chunk of stream) {
+      const content = {
+        messageId,
+        data: chunk,
+      };
+      console.log(`🤖 ~ createWindow ~ content:`, content);
+      // send message to ipcRenderer
+      mainWindow.webContents.send("update-message", content);
     }
   });
 
