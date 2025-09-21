@@ -73,3 +73,25 @@ const runWithGenerator = () => {
 };
 
 runWithGenerator();
+
+const rangeWithAsyncGenerator = {
+  from: 11,
+  to: 15,
+  // The 'async *' before [Symbol.asyncIterator] makes this a generator method.
+  async *[Symbol.asyncIterator]() {
+    for (let i = this.from; i <= this.to; i++) {
+      // wait for 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      yield i;
+    }
+  },
+};
+
+const runWithAsyncGenerator = async () => {
+  console.log(`🤖 ~ runWithAsyncGenerator:`);
+  for await (const item of rangeWithAsyncGenerator) {
+    console.log("item", item);
+  }
+};
+
+runWithAsyncGenerator();
