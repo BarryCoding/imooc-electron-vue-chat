@@ -21,6 +21,57 @@
   "settings": {
     "title": "Settings",
     "subtitle": "Customize your application preferences",
+    "tabs": {
+      "common": "Common",
+      "ai": "AI Settings"
+    },
+    "common": {
+      "title": "Common Settings",
+      "subtitle": "General application preferences"
+    },
+    "ai": {
+      "title": "AI Settings",
+      "subtitle": "Configure AI providers and models",
+      "providers": {
+        "title": "AI Providers",
+        "description": "Configure your AI service providers",
+        "dashscope": {
+          "name": "Dashscope",
+          "apiKey": "API Key",
+          "apiKeyPlaceholder": "Enter your Dashscope API key",
+          "baseUrl": "Base URL",
+          "baseUrlPlaceholder": "https://dashscope.aliyuncs.com/api/v1"
+        },
+        "deepseek": {
+          "name": "DeepSeek",
+          "apiKey": "API Key",
+          "apiKeyPlaceholder": "Enter your DeepSeek API key",
+          "baseUrl": "Base URL",
+          "baseUrlPlaceholder": "https://api.deepseek.com/v1"
+        },
+        "anthropic": {
+          "name": "Anthropic",
+          "apiKey": "API Key",
+          "apiKeyPlaceholder": "Enter your Anthropic API key",
+          "baseUrl": "Base URL",
+          "baseUrlPlaceholder": "https://api.anthropic.com/v1"
+        }
+      },
+      "actions": {
+        "title": "Actions",
+        "description": "Reset settings or save configuration",
+        "resetToDefaults": "Reset to Defaults",
+        "saveSettings": "Save Settings"
+      },
+      "messages": {
+        "settingsSaved": "AI settings saved successfully",
+        "settingsSavedAuto": "AI settings saved automatically",
+        "settingsReset": "AI settings reset to defaults",
+        "loadFailed": "Failed to load AI settings",
+        "saveFailed": "Failed to save AI settings",
+        "resetFailed": "Failed to reset AI settings"
+      }
+    },
     "language": {
       "title": "Language",
       "description": "Choose your preferred language",

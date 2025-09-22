@@ -21,6 +21,57 @@
   "settings": {
     "title": "设置",
     "subtitle": "自定义您的应用程序偏好",
+    "tabs": {
+      "common": "通用设置",
+      "ai": "AI设置"
+    },
+    "common": {
+      "title": "通用设置",
+      "subtitle": "常规应用程序偏好"
+    },
+    "ai": {
+      "title": "AI设置",
+      "subtitle": "配置AI提供商和模型",
+      "providers": {
+        "title": "AI提供商",
+        "description": "配置您的AI服务提供商",
+        "dashscope": {
+          "name": "Dashscope",
+          "apiKey": "API密钥",
+          "apiKeyPlaceholder": "输入您的Dashscope API密钥",
+          "baseUrl": "基础URL",
+          "baseUrlPlaceholder": "https://dashscope.aliyuncs.com/api/v1"
+        },
+        "deepseek": {
+          "name": "DeepSeek",
+          "apiKey": "API密钥",
+          "apiKeyPlaceholder": "输入您的DeepSeek API密钥",
+          "baseUrl": "基础URL",
+          "baseUrlPlaceholder": "https://api.deepseek.com/v1"
+        },
+        "anthropic": {
+          "name": "Anthropic",
+          "apiKey": "API密钥",
+          "apiKeyPlaceholder": "输入您的Anthropic API密钥",
+          "baseUrl": "基础URL",
+          "baseUrlPlaceholder": "https://api.anthropic.com/v1"
+        }
+      },
+      "actions": {
+        "title": "操作",
+        "description": "重置设置或保存配置",
+        "resetToDefaults": "重置为默认值",
+        "saveSettings": "保存设置"
+      },
+      "messages": {
+        "settingsSaved": "AI设置保存成功",
+        "settingsSavedAuto": "AI设置已自动保存",
+        "settingsReset": "AI设置已重置为默认值",
+        "loadFailed": "加载AI设置失败",
+        "saveFailed": "保存AI设置失败",
+        "resetFailed": "重置AI设置失败"
+      }
+    },
     "language": {
       "title": "语言",
       "description": "选择您偏好的语言",
