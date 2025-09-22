@@ -1,5 +1,10 @@
 import { ipcRenderer, contextBridge, webUtils } from "electron";
-import type { CreateChatProps, OnUpdatedCallback } from "./types";
+import type {
+  CreateChatProps,
+  OnUpdatedCallback,
+  AppConfig,
+  ConfigUpdateProps,
+} from "./types";
 
 contextBridge.exposeInMainWorld("electronAPI", {
   // send message to main process
@@ -15,4 +20,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
   // send message to main process and receive response
   copyImageToUserDir: (filePath: string) =>
     ipcRenderer.invoke("copy-image-to-user-dir", filePath),
+
+  // App configuration management
+  getAppConfig: (): Promise<AppConfig> => ipcRenderer.invoke("get-app-config"),
+
+  updateAppConfig: (updates: ConfigUpdateProps): Promise<AppConfig> =>
+    ipcRenderer.invoke("update-app-config", updates),
+
+  resetAppConfig: (): Promise<AppConfig> =>
+    ipcRenderer.invoke("reset-app-config"),
 });

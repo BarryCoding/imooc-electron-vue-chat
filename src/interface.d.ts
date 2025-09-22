@@ -1,4 +1,9 @@
-import { CreateChatProps, OnUpdatedCallback } from "./types";
+import {
+  CreateChatProps,
+  OnUpdatedCallback,
+  AppConfig,
+  ConfigUpdateProps,
+} from "./types";
 
 export interface IElectronAPI {
   startChat: (data: CreateChatProps) => void;
@@ -6,6 +11,11 @@ export interface IElectronAPI {
 
   getFilePath: (file: File) => string;
   copyImageToUserDir: (sourcePath: string) => Promise<string>;
+
+  // App configuration management
+  getAppConfig: () => Promise<AppConfig>;
+  updateAppConfig: (updates: ConfigUpdateProps) => Promise<AppConfig>;
+  resetAppConfig: () => Promise<AppConfig>;
 }
 
 declare global {

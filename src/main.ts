@@ -1,11 +1,12 @@
 import { app, BrowserWindow, ipcMain, net, protocol } from "electron";
 import path from "node:path";
 import started from "electron-squirrel-startup";
-import { CreateChatProps } from "./types";
+import { CreateChatProps, ConfigUpdateProps } from "./types";
 import "dotenv/config";
 import fs from "node:fs/promises";
 import url from "node:url";
 import { createProvider } from "./ai-providers";
+import { loadConfig, updateConfig, resetConfig } from "./app-config";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -43,6 +44,22 @@ const createWindow = async () => {
 
     // Return the destination path of the copied image
     return destPath;
+  });
+
+  // Config management IPC handlers
+  ipcMain.handle("get-app-config", async () => {
+    return await loadConfig();
+  });
+
+  ipcMain.handle(
+    "update-app-config",
+    async (event, updates: ConfigUpdateProps) => {
+      return await updateConfig(updates);
+    },
+  );
+
+  ipcMain.handle("reset-app-config", async () => {
+    return await resetConfig();
   });
 
   // REFACTOR: SRP

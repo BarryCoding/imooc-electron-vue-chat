@@ -58,3 +58,10 @@ export interface UniversalChunkProps {
   is_end: boolean;
   result: string;
 }
+
+export interface AppConfig {
+  language: string;
+  fontSize: number;
+}
+
+export type ConfigUpdateProps = Partial<AppConfig>;
