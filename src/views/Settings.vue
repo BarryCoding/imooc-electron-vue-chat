@@ -1,6 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SettingsComponent from "../components/Settings.vue";
+</script>
+
 <template>
-  <div>
-    <h1>Settings Page</h1>
-  </div>
+  <SettingsComponent />
 </template>
