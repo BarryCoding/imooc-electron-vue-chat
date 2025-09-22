@@ -1,0 +1,80 @@
+{
+  "common": {
+    "settings": "Settings",
+    "language": "Language",
+    "fontSize": "Font Size",
+    "preview": "Preview",
+    "actions": "Actions",
+    "save": "Save",
+    "reset": "Reset",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "success": "Success",
+    "error": "Error",
+    "close": "Close",
+    "send": "Send",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your application preferences",
+    "language": {
+      "title": "Language",
+      "description": "Choose your preferred language",
+      "english": "English",
+      "chinese": "中文 (简体)"
+    },
+    "fontSize": {
+      "title": "Font Size",
+      "description": "Adjust the text size for better readability",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "xl": "XL",
+      "xxl": "XXL"
+    },
+    "preview": {
+      "title": "Preview",
+      "description": "See how your settings will look",
+      "text": "This is how your text will appear with the current settings.",
+      "info": "Language: {language} | Font Size: {fontSize}px"
+    },
+    "actions": {
+      "title": "Actions",
+      "description": "Reset settings or save configuration",
+      "resetToDefaults": "Reset to Defaults",
+      "saveSettings": "Save Settings"
+    },
+    "messages": {
+      "settingsSaved": "Settings saved successfully",
+      "settingsSavedAuto": "Settings saved automatically",
+      "settingsReset": "Settings reset to defaults",
+      "loadFailed": "Failed to load settings",
+      "saveFailed": "Failed to save settings",
+      "resetFailed": "Failed to reset settings"
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "chat": "Chat",
+    "settings": "Settings"
+  },
+  "chat": {
+    "newChat": "New Chat",
+    "sendMessage": "Send a message...",
+    "typing": "Typing...",
+    "noMessages": "No messages yet. Start a conversation!",
+    "selectModel": "Select Model",
+    "selectProvider": "Select AI Provider"
+  },
+  "home": {
+    "title": "Welcome to Electron Chat",
+    "subtitle": "Start a conversation with AI",
+    "getStarted": "Get Started",
+    "recentChats": "Recent Chats",
+    "noRecentChats": "No recent chats"
+  }
+}

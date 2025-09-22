@@ -79,6 +79,7 @@ const onCreate = () => {
         class="flex-1 border-0 bg-white outline-none focus:ring-0"
         type="text"
         v-model="userMessage"
+        :placeholder="$t('chat.sendMessage')"
         :disabled="disabled"
       />
       <Button
@@ -86,7 +87,7 @@ const onCreate = () => {
         @click="onCreate"
         :disabled="disabled"
       >
-        发送
+        {{ $t("common.send") }}
       </Button>
     </div>
   </div>

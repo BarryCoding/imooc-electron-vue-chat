@@ -8,6 +8,7 @@ import Home from "./views/Home.vue";
 import Chat from "./views/Chat.vue";
 import Settings from "./views/Settings.vue";
 import { useChatStore } from "./stores/chat";
+import i18n from "./i18n";
 
 const routes = [
   { path: "/", component: Home },
@@ -28,4 +29,4 @@ router.beforeEach((to) => {
 
 const pinia = createPinia();
 
-createApp(App).use(router).use(pinia).mount("#app");
+createApp(App).use(router).use(pinia).use(i18n).mount("#app");

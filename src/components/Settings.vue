@@ -4,10 +4,10 @@
       <!-- Header -->
       <div class="mb-8">
         <h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-          Settings
+          {{ $t("settings.title") }}
         </h1>
         <p class="text-gray-600 dark:text-gray-400">
-          Customize your application preferences
+          {{ $t("settings.subtitle") }}
         </p>
       </div>
 
@@ -20,10 +20,10 @@
           <div class="mb-4 flex items-center justify-between">
             <div>
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                Language
+                {{ $t("settings.language.title") }}
               </h2>
               <p class="text-sm text-gray-600 dark:text-gray-400">
-                Choose your preferred language
+                {{ $t("settings.language.description") }}
               </p>
             </div>
             <Icon icon="lucide:globe" class="h-6 w-6 text-gray-400" />
@@ -31,19 +31,11 @@
 
           <select
             v-model="config.language"
-            @change="handleConfigChange"
+            @change="handleLanguageChange"
             class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           >
-            <option value="en">English</option>
-            <option value="zh-CN">中文 (简体)</option>
-            <option value="zh-TW">中文 (繁體)</option>
-            <option value="ja">日本語</option>
-            <option value="ko">한국어</option>
-            <option value="fr">Français</option>
-            <option value="de">Deutsch</option>
-            <option value="es">Español</option>
-            <option value="pt">Português</option>
-            <option value="ru">Русский</option>
+            <option value="en">{{ $t("settings.language.english") }}</option>
+            <option value="zh-CN">{{ $t("settings.language.chinese") }}</option>
           </select>
         </div>
 
@@ -54,10 +46,10 @@
           <div class="mb-4 flex items-center justify-between">
             <div>
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                Font Size
+                {{ $t("settings.fontSize.title") }}
               </h2>
               <p class="text-sm text-gray-600 dark:text-gray-400">
-                Adjust the text size for better readability
+                {{ $t("settings.fontSize.description") }}
               </p>
             </div>
             <Icon icon="lucide:type" class="h-6 w-6 text-gray-400" />
@@ -69,9 +61,9 @@
               <div
                 class="flex justify-between text-sm text-gray-600 dark:text-gray-400"
               >
-                <span>Small</span>
+                <span>{{ $t("settings.fontSize.small") }}</span>
                 <span class="font-medium">{{ config.fontSize }}px</span>
-                <span>Large</span>
+                <span>{{ $t("settings.fontSize.large") }}</span>
               </div>
               <input
                 v-model="config.fontSize"
@@ -97,7 +89,7 @@
                     : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600',
                 ]"
               >
-                {{ size.label }}
+                {{ $t(`settings.fontSize.${size.key}`) }}
               </button>
             </div>
           </div>
@@ -110,10 +102,10 @@
           <div class="mb-4 flex items-center justify-between">
             <div>
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                Preview
+                {{ $t("settings.preview.title") }}
               </h2>
               <p class="text-sm text-gray-600 dark:text-gray-400">
-                See how your settings will look
+                {{ $t("settings.preview.description") }}
               </p>
             </div>
             <Icon icon="lucide:eye" class="h-6 w-6 text-gray-400" />
@@ -124,11 +116,15 @@
             :style="{ fontSize: `${config.fontSize}px` }"
           >
             <p class="mb-2 text-gray-900 dark:text-white">
-              This is how your text will appear with the current settings.
+              {{ $t("settings.preview.text") }}
             </p>
             <p class="text-gray-600 dark:text-gray-400">
-              Language: {{ getLanguageName(config.language) }} | Font Size:
-              {{ config.fontSize }}px
+              {{
+                $t("settings.preview.info", {
+                  language: getLanguageName(config.language),
+                  fontSize: config.fontSize,
+                })
+              }}
             </p>
           </div>
         </div>
@@ -140,10 +136,10 @@
           <div class="flex items-center justify-between">
             <div>
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                Actions
+                {{ $t("settings.actions.title") }}
               </h2>
               <p class="text-sm text-gray-600 dark:text-gray-400">
-                Reset settings or save configuration
+                {{ $t("settings.actions.description") }}
               </p>
             </div>
             <div class="flex gap-3">
@@ -153,7 +149,7 @@
                 class="flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
               >
                 <Icon icon="lucide:rotate-ccw" class="mr-2 h-4 w-4" />
-                Reset to Defaults
+                {{ $t("settings.actions.resetToDefaults") }}
               </button>
               <button
                 @click="saveSettings"
@@ -161,7 +157,7 @@
                 class="flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Icon icon="lucide:save" class="mr-2 h-4 w-4" />
-                Save Settings
+                {{ $t("settings.actions.saveSettings") }}
               </button>
             </div>
           </div>
@@ -196,7 +192,15 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, toRaw } from "vue";
 import { Icon } from "@iconify/vue";
+import { useI18n } from "vue-i18n";
+import {
+  updateLanguage,
+  isSupportedLocale,
+  type SupportedLocale,
+} from "../i18n";
 import type { AppConfig, ConfigUpdateProps } from "../types";
+
+const { t } = useI18n();
 
 // Reactive state
 const config = ref<AppConfig>({
@@ -210,25 +214,17 @@ const statusType = ref<"success" | "error">("success");
 
 // Font size presets
 const fontSizes = [
-  { label: "Small", value: 12 },
-  { label: "Medium", value: 14 },
-  { label: "Large", value: 16 },
-  { label: "XL", value: 18 },
-  { label: "XXL", value: 20 },
+  { label: "Small", value: 12, key: "small" },
+  { label: "Medium", value: 14, key: "medium" },
+  { label: "Large", value: 16, key: "large" },
+  { label: "XL", value: 18, key: "xl" },
+  { label: "XXL", value: 20, key: "xxl" },
 ];
 
 // Language mapping
 const languageMap: Record<string, string> = {
-  en: "English",
-  "zh-CN": "中文 (简体)",
-  "zh-TW": "中文 (繁體)",
-  ja: "日本語",
-  ko: "한국어",
-  fr: "Français",
-  de: "Deutsch",
-  es: "Español",
-  pt: "Português",
-  ru: "Русский",
+  en: t("settings.language.english"),
+  "zh-CN": t("settings.language.chinese"),
 };
 
 // Methods
@@ -244,19 +240,38 @@ const loadConfig = async () => {
     config.value = currentConfig;
   } catch (error) {
     console.error("Failed to load config:", error);
-    showStatus("Failed to load settings", "error");
+    showStatus(t("settings.messages.loadFailed"), "error");
   } finally {
     isLoading.value = false;
+  }
+};
+
+const handleLanguageChange = async () => {
+  try {
+    const selectedLanguage = config.value.language;
+
+    // Validate that the selected language is supported
+    if (!isSupportedLocale(selectedLanguage)) {
+      console.error(`Unsupported locale: ${selectedLanguage}`);
+      showStatus(t("settings.messages.saveFailed"), "error");
+      return;
+    }
+
+    await updateLanguage(selectedLanguage);
+    showStatus(t("settings.messages.settingsSavedAuto"), "success");
+  } catch (error) {
+    console.error("Failed to save language config:", error);
+    showStatus(t("settings.messages.saveFailed"), "error");
   }
 };
 
 const handleConfigChange = async () => {
   try {
     await window.electronAPI.updateAppConfig(toRaw(config.value));
-    showStatus("Settings saved automatically", "success");
+    showStatus(t("settings.messages.settingsSavedAuto"), "success");
   } catch (error) {
     console.error("Failed to save config:", error);
-    showStatus("Failed to save settings", "error");
+    showStatus(t("settings.messages.saveFailed"), "error");
   }
 };
 
@@ -270,10 +285,21 @@ const resetToDefaults = async () => {
     isLoading.value = true;
     const defaultConfig = await window.electronAPI.resetAppConfig();
     config.value = defaultConfig;
-    showStatus("Settings reset to defaults", "success");
+
+    // Validate and update language
+    if (isSupportedLocale(defaultConfig.language)) {
+      await updateLanguage(defaultConfig.language);
+    } else {
+      console.warn(
+        `Default language ${defaultConfig.language} is not supported, falling back to 'en'`,
+      );
+      await updateLanguage("en");
+    }
+
+    showStatus(t("settings.messages.settingsReset"), "success");
   } catch (error) {
     console.error("Failed to reset config:", error);
-    showStatus("Failed to reset settings", "error");
+    showStatus(t("settings.messages.resetFailed"), "error");
   } finally {
     isLoading.value = false;
   }
@@ -283,10 +309,21 @@ const saveSettings = async () => {
   try {
     isLoading.value = true;
     await window.electronAPI.updateAppConfig(toRaw(config.value));
-    showStatus("Settings saved successfully", "success");
+
+    // Validate and update language
+    if (isSupportedLocale(config.value.language)) {
+      await updateLanguage(config.value.language);
+    } else {
+      console.warn(
+        `Language ${config.value.language} is not supported, falling back to 'en'`,
+      );
+      await updateLanguage("en");
+    }
+
+    showStatus(t("settings.messages.settingsSaved"), "success");
   } catch (error) {
     console.error("Failed to save config:", error);
-    showStatus("Failed to save settings", "error");
+    showStatus(t("settings.messages.saveFailed"), "error");
   } finally {
     isLoading.value = false;
   }
@@ -301,8 +338,8 @@ const showStatus = (message: string, type: "success" | "error") => {
 };
 
 // Lifecycle
-onMounted(() => {
-  loadConfig();
+onMounted(async () => {
+  await loadConfig();
 });
 
 // Watch for config changes and auto-save

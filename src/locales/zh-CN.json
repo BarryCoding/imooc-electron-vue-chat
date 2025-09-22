@@ -1,0 +1,80 @@
+{
+  "common": {
+    "settings": "设置",
+    "language": "语言",
+    "fontSize": "字体大小",
+    "preview": "预览",
+    "actions": "操作",
+    "save": "保存",
+    "reset": "重置",
+    "cancel": "取消",
+    "confirm": "确认",
+    "loading": "加载中...",
+    "success": "成功",
+    "error": "错误",
+    "close": "关闭",
+    "send": "发送",
+    "yes": "是",
+    "no": "否",
+    "ok": "确定"
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "自定义您的应用程序偏好",
+    "language": {
+      "title": "语言",
+      "description": "选择您偏好的语言",
+      "english": "English",
+      "chinese": "中文 (简体)"
+    },
+    "fontSize": {
+      "title": "字体大小",
+      "description": "调整文本大小以获得更好的可读性",
+      "small": "小",
+      "medium": "中",
+      "large": "大",
+      "xl": "特大",
+      "xxl": "超大"
+    },
+    "preview": {
+      "title": "预览",
+      "description": "查看您的设置效果",
+      "text": "这是您的文本在当前设置下的显示效果。",
+      "info": "语言: {language} | 字体大小: {fontSize}px"
+    },
+    "actions": {
+      "title": "操作",
+      "description": "重置设置或保存配置",
+      "resetToDefaults": "重置为默认值",
+      "saveSettings": "保存设置"
+    },
+    "messages": {
+      "settingsSaved": "设置保存成功",
+      "settingsSavedAuto": "设置已自动保存",
+      "settingsReset": "设置已重置为默认值",
+      "loadFailed": "加载设置失败",
+      "saveFailed": "保存设置失败",
+      "resetFailed": "重置设置失败"
+    }
+  },
+  "navigation": {
+    "home": "首页",
+    "chat": "聊天",
+    "settings": "设置"
+  },
+  "chat": {
+    "newChat": "新聊天",
+    "sendMessage": "发送消息...",
+    "typing": "正在输入...",
+    "noMessages": "还没有消息。开始对话吧！",
+    "selectModel": "选择模型",
+    "selectProvider": "选择AI提供商"
+  },
+  "home": {
+    "title": "欢迎使用 Electron Chat",
+    "subtitle": "开始与AI对话",
+    "getStarted": "开始使用",
+    "recentChats": "最近聊天",
+    "noRecentChats": "没有最近的聊天记录"
+  }
+}

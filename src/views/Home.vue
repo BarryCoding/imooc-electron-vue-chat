@@ -1,7 +1,15 @@
 <template>
   <div class="mx-auto h-full w-[80%]">
-    <div class="flex h-[85%] items-center">
-      <AIProviderSelect :items="aiProviders" v-model="currentModel" />
+    <div class="flex h-[85%] items-center justify-center">
+      <div class="text-center">
+        <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+          {{ $t("home.title") }}
+        </h1>
+        <p class="mb-8 text-lg text-gray-600 dark:text-gray-400">
+          {{ $t("home.subtitle") }}
+        </p>
+        <AIProviderSelect :items="aiProviders" v-model="currentModel" />
+      </div>
     </div>
     <div class="flex h-[15%] items-center">
       <MessageInput @create="createChat" :disabled="!currentModel" />

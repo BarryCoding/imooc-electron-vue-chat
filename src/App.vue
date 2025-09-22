@@ -2,15 +2,19 @@
 import ChatList from "./components/ChatList.vue";
 import Button from "./components/Button.vue";
 import { onMounted, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { initProviders } from "./db";
 import { useChatStore } from "./stores/chat";
 import { useAiProviderStore } from "./stores/ai-provider";
+import { loadLanguageFromConfig } from "./i18n";
 
+const { t } = useI18n();
 const chatStore = useChatStore();
 const items = computed(() => chatStore.items);
 const aiProviderStore = useAiProviderStore();
 
 onMounted(async () => {
+  await loadLanguageFromConfig();
   await initProviders();
   await aiProviderStore.fetchAiProviders();
   await chatStore.fetchChats();
@@ -26,12 +30,12 @@ onMounted(async () => {
       <div class="grid h-[10%] grid-cols-2 gap-2 p-2">
         <RouterLink to="/">
           <Button icon-name="radix-icons:plus-circled" class="w-full">
-            新建聊天
+            {{ $t("chat.newChat") }}
           </Button>
         </RouterLink>
         <RouterLink to="/settings">
           <Button icon-name="radix-icons:gear" class="w-full">
-            应用设置
+            {{ $t("navigation.settings") }}
           </Button>
         </RouterLink>
       </div>
