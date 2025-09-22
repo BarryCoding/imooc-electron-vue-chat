@@ -30,12 +30,12 @@ onMounted(async () => {
       <div class="grid h-[10%] grid-cols-2 gap-2 p-2">
         <RouterLink to="/">
           <Button icon-name="radix-icons:plus-circled" class="w-full">
-            {{ $t("chat.newChat") }}
+            {{ t("chat.newChat") }}
           </Button>
         </RouterLink>
         <RouterLink to="/settings">
           <Button icon-name="radix-icons:gear" class="w-full">
-            {{ $t("navigation.settings") }}
+            {{ t("navigation.settings") }}
           </Button>
         </RouterLink>
       </div>

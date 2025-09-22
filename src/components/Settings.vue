@@ -4,10 +4,10 @@
       <!-- Header -->
       <div class="mb-8">
         <h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-          {{ $t("settings.title") }}
+          {{ t("settings.title") }}
         </h1>
         <p class="text-gray-600 dark:text-gray-400">
-          {{ $t("settings.subtitle") }}
+          {{ t("settings.subtitle") }}
         </p>
       </div>
 
@@ -20,10 +20,10 @@
           <div class="mb-4 flex items-center justify-between">
             <div>
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ $t("settings.language.title") }}
+                {{ t("settings.language.title") }}
               </h2>
               <p class="text-sm text-gray-600 dark:text-gray-400">
-                {{ $t("settings.language.description") }}
+                {{ t("settings.language.description") }}
               </p>
             </div>
             <Icon icon="lucide:globe" class="h-6 w-6 text-gray-400" />
@@ -34,8 +34,8 @@
             @change="handleLanguageChange"
             class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           >
-            <option value="en">{{ $t("settings.language.english") }}</option>
-            <option value="zh-CN">{{ $t("settings.language.chinese") }}</option>
+            <option value="en">{{ t("settings.language.english") }}</option>
+            <option value="zh-CN">{{ t("settings.language.chinese") }}</option>
           </select>
         </div>
 
@@ -46,10 +46,10 @@
           <div class="mb-4 flex items-center justify-between">
             <div>
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ $t("settings.fontSize.title") }}
+                {{ t("settings.fontSize.title") }}
               </h2>
               <p class="text-sm text-gray-600 dark:text-gray-400">
-                {{ $t("settings.fontSize.description") }}
+                {{ t("settings.fontSize.description") }}
               </p>
             </div>
             <Icon icon="lucide:type" class="h-6 w-6 text-gray-400" />
@@ -61,9 +61,9 @@
               <div
                 class="flex justify-between text-sm text-gray-600 dark:text-gray-400"
               >
-                <span>{{ $t("settings.fontSize.small") }}</span>
+                <span>{{ t("settings.fontSize.small") }}</span>
                 <span class="font-medium">{{ config.fontSize }}px</span>
-                <span>{{ $t("settings.fontSize.large") }}</span>
+                <span>{{ t("settings.fontSize.large") }}</span>
               </div>
               <input
                 v-model="config.fontSize"
@@ -89,7 +89,7 @@
                     : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600',
                 ]"
               >
-                {{ $t(`settings.fontSize.${size.key}`) }}
+                {{ t(`settings.fontSize.${size.key}`) }}
               </button>
             </div>
           </div>
@@ -102,10 +102,10 @@
           <div class="mb-4 flex items-center justify-between">
             <div>
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ $t("settings.preview.title") }}
+                {{ t("settings.preview.title") }}
               </h2>
               <p class="text-sm text-gray-600 dark:text-gray-400">
-                {{ $t("settings.preview.description") }}
+                {{ t("settings.preview.description") }}
               </p>
             </div>
             <Icon icon="lucide:eye" class="h-6 w-6 text-gray-400" />
@@ -116,11 +116,11 @@
             :style="{ fontSize: `${config.fontSize}px` }"
           >
             <p class="mb-2 text-gray-900 dark:text-white">
-              {{ $t("settings.preview.text") }}
+              {{ t("settings.preview.text") }}
             </p>
             <p class="text-gray-600 dark:text-gray-400">
               {{
-                $t("settings.preview.info", {
+                t("settings.preview.info", {
                   language: getLanguageName(config.language),
                   fontSize: config.fontSize,
                 })
@@ -136,10 +136,10 @@
           <div class="flex items-center justify-between">
             <div>
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                {{ $t("settings.actions.title") }}
+                {{ t("settings.actions.title") }}
               </h2>
               <p class="text-sm text-gray-600 dark:text-gray-400">
-                {{ $t("settings.actions.description") }}
+                {{ t("settings.actions.description") }}
               </p>
             </div>
             <div class="flex gap-3">
@@ -149,7 +149,7 @@
                 class="flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
               >
                 <Icon icon="lucide:rotate-ccw" class="mr-2 h-4 w-4" />
-                {{ $t("settings.actions.resetToDefaults") }}
+                {{ t("settings.actions.resetToDefaults") }}
               </button>
               <button
                 @click="saveSettings"
@@ -157,7 +157,7 @@
                 class="flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Icon icon="lucide:save" class="mr-2 h-4 w-4" />
-                {{ $t("settings.actions.saveSettings") }}
+                {{ t("settings.actions.saveSettings") }}
               </button>
             </div>
           </div>

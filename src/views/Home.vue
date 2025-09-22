@@ -3,10 +3,10 @@
     <div class="flex h-[85%] items-center justify-center">
       <div class="text-center">
         <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
-          {{ $t("home.title") }}
+          {{ t("home.title") }}
         </h1>
         <p class="mb-8 text-lg text-gray-600 dark:text-gray-400">
-          {{ $t("home.subtitle") }}
+          {{ t("home.subtitle") }}
         </p>
         <AIProviderSelect :items="aiProviders" v-model="currentModel" />
       </div>
@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import AIProviderSelect from "../components/AIProviderSelect.vue";
 import MessageInput from "../components/MessageInput.vue";
 import { useRouter } from "vue-router";
@@ -26,6 +27,7 @@ import { useChatStore } from "../stores/chat";
 import { useAiProviderStore } from "../stores/ai-provider";
 import { useMessageStore } from "../stores/message";
 
+const { t } = useI18n();
 const currentModel = ref("");
 const chatStore = useChatStore();
 const router = useRouter();

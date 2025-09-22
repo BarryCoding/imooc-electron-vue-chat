@@ -11,13 +11,9 @@ const messages = {
 };
 
 const i18n = createI18n({
-  legacy: false, // Use Composition API
-  globalInjection: true, // Enable global injection for better DX
+  legacy: false, // Use Composition API (required for v11+)
   locale: "en", // Default locale
   fallbackLocale: "en", // Fallback locale
-  fallbackFormat: true, // Fallback to key if translation missing
-  missingWarn: true, // Show warnings for missing keys in development
-  fallbackWarn: true, // Show warnings when falling back to fallback locale
   messages,
   // Custom missing key handler for better debugging
   missing: (locale: string, key: string) => {

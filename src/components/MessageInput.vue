@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 import Button from "./Button.vue";
 import { Icon } from "@iconify/vue";
 
 defineProps<{
   disabled?: boolean;
 }>();
+
+const { t } = useI18n();
 
 const emit = defineEmits<{
   create: [value: string, filePath?: string];
@@ -79,7 +82,7 @@ const onCreate = () => {
         class="flex-1 border-0 bg-white outline-none focus:ring-0"
         type="text"
         v-model="userMessage"
-        :placeholder="$t('chat.sendMessage')"
+        :placeholder="t('chat.sendMessage')"
         :disabled="disabled"
       />
       <Button
@@ -87,7 +90,7 @@ const onCreate = () => {
         @click="onCreate"
         :disabled="disabled"
       >
-        {{ $t("common.send") }}
+        {{ t("common.send") }}
       </Button>
     </div>
   </div>
