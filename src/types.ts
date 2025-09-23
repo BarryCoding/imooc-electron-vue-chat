@@ -59,9 +59,15 @@ export interface UniversalChunkProps {
   result: string;
 }
 
+export interface ProviderConfig {
+  apiKey: string;
+  baseUrl: string;
+}
+
 export interface AppConfig {
   language: string;
   fontSize: number;
+  providers: Record<string, ProviderConfig>;
 }
 
 export type ConfigUpdateProps = Partial<AppConfig>;

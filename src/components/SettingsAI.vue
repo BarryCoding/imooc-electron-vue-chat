@@ -23,17 +23,29 @@
           class="space-y-2"
           v-model:value="activeProvider"
         >
-          <!-- Dashscope Provider -->
+          <!-- Dynamic Provider Items -->
           <AccordionItem
-            value="dashscope"
+            v-for="provider in aiProviderStore.items"
+            :key="provider.id"
+            :value="provider.name"
             class="rounded-lg border border-gray-200 dark:border-gray-700"
           >
             <AccordionTrigger
               class="flex w-full items-center justify-between rounded-lg bg-gray-50 px-4 py-3 text-left font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
             >
               <div class="flex items-center space-x-3">
-                <Icon icon="lucide:zap" class="h-5 w-5 text-blue-500" />
-                <span>{{ t("settings.ai.providers.dashscope.name") }}</span>
+                <img
+                  v-if="provider.avatar"
+                  :src="provider.avatar"
+                  :alt="provider.title || provider.name"
+                  class="h-5 w-5 rounded"
+                />
+                <Icon
+                  v-else
+                  icon="lucide:brain"
+                  class="h-5 w-5 text-gray-500"
+                />
+                <span>{{ provider.title || provider.name }}</span>
               </div>
               <Icon
                 icon="lucide:chevron-down"
@@ -46,142 +58,34 @@
                   <label
                     class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
-                    {{ t("settings.ai.providers.dashscope.apiKey") }}
+                    {{ t(`settings.ai.providers.${provider.name}.apiKey`) }}
                   </label>
                   <input
-                    v-model="providers.dashscope.apiKey"
+                    v-model="providers[provider.name].apiKey"
                     type="password"
                     :placeholder="
-                      t('settings.ai.providers.dashscope.apiKeyPlaceholder')
+                      t(
+                        `settings.ai.providers.${provider.name}.apiKeyPlaceholder`,
+                      )
                     "
                     class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    @input="handleProviderChange('dashscope')"
                   />
                 </div>
                 <div>
                   <label
                     class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
-                    {{ t("settings.ai.providers.dashscope.baseUrl") }}
+                    {{ t(`settings.ai.providers.${provider.name}.baseUrl`) }}
                   </label>
                   <input
-                    v-model="providers.dashscope.baseUrl"
+                    v-model="providers[provider.name].baseUrl"
                     type="url"
                     :placeholder="
-                      t('settings.ai.providers.dashscope.baseUrlPlaceholder')
+                      t(
+                        `settings.ai.providers.${provider.name}.baseUrlPlaceholder`,
+                      )
                     "
                     class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    @input="handleProviderChange('dashscope')"
-                  />
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          <!-- DeepSeek Provider -->
-          <AccordionItem
-            value="deepseek"
-            class="rounded-lg border border-gray-200 dark:border-gray-700"
-          >
-            <AccordionTrigger
-              class="flex w-full items-center justify-between rounded-lg bg-gray-50 px-4 py-3 text-left font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-            >
-              <div class="flex items-center space-x-3">
-                <Icon icon="lucide:search" class="h-5 w-5 text-green-500" />
-                <span>{{ t("settings.ai.providers.deepseek.name") }}</span>
-              </div>
-              <Icon
-                icon="lucide:chevron-down"
-                class="h-4 w-4 transition-transform duration-200"
-              />
-            </AccordionTrigger>
-            <AccordionContent class="px-4 pt-0 pb-4">
-              <div class="space-y-4">
-                <div>
-                  <label
-                    class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    {{ t("settings.ai.providers.deepseek.apiKey") }}
-                  </label>
-                  <input
-                    v-model="providers.deepseek.apiKey"
-                    type="password"
-                    :placeholder="
-                      t('settings.ai.providers.deepseek.apiKeyPlaceholder')
-                    "
-                    class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    @input="handleProviderChange('deepseek')"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    {{ t("settings.ai.providers.deepseek.baseUrl") }}
-                  </label>
-                  <input
-                    v-model="providers.deepseek.baseUrl"
-                    type="url"
-                    :placeholder="
-                      t('settings.ai.providers.deepseek.baseUrlPlaceholder')
-                    "
-                    class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    @input="handleProviderChange('deepseek')"
-                  />
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          <!-- Anthropic Provider -->
-          <AccordionItem
-            value="anthropic"
-            class="rounded-lg border border-gray-200 dark:border-gray-700"
-          >
-            <AccordionTrigger
-              class="flex w-full items-center justify-between rounded-lg bg-gray-50 px-4 py-3 text-left font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-            >
-              <div class="flex items-center space-x-3">
-                <Icon icon="lucide:bot" class="h-5 w-5 text-purple-500" />
-                <span>{{ t("settings.ai.providers.anthropic.name") }}</span>
-              </div>
-              <Icon
-                icon="lucide:chevron-down"
-                class="h-4 w-4 transition-transform duration-200"
-              />
-            </AccordionTrigger>
-            <AccordionContent class="px-4 pt-0 pb-4">
-              <div class="space-y-4">
-                <div>
-                  <label
-                    class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    {{ t("settings.ai.providers.anthropic.apiKey") }}
-                  </label>
-                  <input
-                    v-model="providers.anthropic.apiKey"
-                    type="password"
-                    :placeholder="
-                      t('settings.ai.providers.anthropic.apiKeyPlaceholder')
-                    "
-                    class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    @input="handleProviderChange('anthropic')"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    {{ t("settings.ai.providers.anthropic.baseUrl") }}
-                  </label>
-                  <input
-                    v-model="providers.anthropic.baseUrl"
-                    type="url"
-                    :placeholder="
-                      t('settings.ai.providers.anthropic.baseUrlPlaceholder')
-                    "
-                    class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    @input="handleProviderChange('anthropic')"
                   />
                 </div>
               </div>
@@ -250,7 +154,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, toRaw } from "vue";
+import { ref, onMounted, computed, toRaw } from "vue";
 import { Icon } from "@iconify/vue";
 import { useI18n } from "vue-i18n";
 import {
@@ -259,8 +163,11 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "radix-vue";
+import { useAiProviderStore } from "../stores/ai-provider";
+import type { ProviderConfig } from "../types";
 
 const { t } = useI18n();
+const aiProviderStore = useAiProviderStore();
 
 // Reactive state
 const activeProvider = ref<string>("");
@@ -268,30 +175,27 @@ const isLoading = ref(false);
 const statusMessage = ref("");
 const statusType = ref<"success" | "error">("success");
 
-// AI Provider configurations
-const providers = ref({
-  dashscope: {
-    apiKey: "",
-    baseUrl: "https://dashscope.aliyuncs.com/api/v1",
-  },
-  deepseek: {
-    apiKey: "",
-    baseUrl: "https://api.deepseek.com/v1",
-  },
-  anthropic: {
-    apiKey: "",
-    baseUrl: "https://api.anthropic.com/v1",
-  },
-});
+// AI Provider configurations - loaded from app config
+const providers = ref<Record<string, ProviderConfig>>({});
 
 // Methods
 const loadProviderConfig = async () => {
   try {
     isLoading.value = true;
-    // TODO: Load AI provider config from electron API
-    // const currentConfig = await window.electronAPI.getAIProviderConfig();
-    // providers.value = currentConfig;
-    console.log("Loading AI provider config...");
+    // Load AI provider config from app config via electronAPI
+    const config = await window.electronAPI.getAppConfig();
+
+    // Initialize providers config for all providers from store
+    const initializedProviders: Record<string, ProviderConfig> = {};
+    aiProviderStore.items.forEach((provider) => {
+      initializedProviders[provider.name] = config.providers[provider.name] || {
+        apiKey: "",
+        baseUrl: "",
+      };
+    });
+
+    providers.value = initializedProviders;
+    console.log("Loading AI provider config...", initializedProviders);
   } catch (error) {
     console.error("Failed to load AI provider config:", error);
     showStatus(t("settings.ai.messages.loadFailed"), "error");
@@ -300,40 +204,24 @@ const loadProviderConfig = async () => {
   }
 };
 
-const handleProviderChange = async (provider: string) => {
-  try {
-    // TODO: Save individual provider config
-    // await window.electronAPI.updateAIProviderConfig(provider, providers.value[provider]);
-    showStatus(t("settings.ai.messages.settingsSavedAuto"), "success");
-  } catch (error) {
-    console.error(`Failed to save ${provider} config:`, error);
-    showStatus(t("settings.ai.messages.saveFailed"), "error");
-  }
-};
-
 const resetToDefaults = async () => {
   try {
     isLoading.value = true;
-    // TODO: Reset AI provider config to defaults
-    // const defaultConfig = await window.electronAPI.resetAIProviderConfig();
-    // providers.value = defaultConfig;
+    // Reset AI provider config to defaults via electronAPI
+    const defaultConfig = await window.electronAPI.resetAppConfig();
 
-    // Reset to default values
-    providers.value = {
-      dashscope: {
+    // Initialize providers config for all providers from store
+    const initializedProviders: Record<string, ProviderConfig> = {};
+    aiProviderStore.items.forEach((provider) => {
+      initializedProviders[provider.name] = defaultConfig.providers[
+        provider.name
+      ] || {
         apiKey: "",
-        baseUrl: "https://dashscope.aliyuncs.com/api/v1",
-      },
-      deepseek: {
-        apiKey: "",
-        baseUrl: "https://api.deepseek.com/v1",
-      },
-      anthropic: {
-        apiKey: "",
-        baseUrl: "https://api.anthropic.com/v1",
-      },
-    };
+        baseUrl: "",
+      };
+    });
 
+    providers.value = initializedProviders;
     showStatus(t("settings.ai.messages.settingsReset"), "success");
   } catch (error) {
     console.error("Failed to reset AI provider config:", error);
@@ -346,9 +234,11 @@ const resetToDefaults = async () => {
 const saveSettings = async () => {
   try {
     isLoading.value = true;
-    // TODO: Save all AI provider configs
-    // await window.electronAPI.updateAIProviderConfigs(toRaw(providers.value));
-    console.log("Saving AI provider configs:", toRaw(providers.value));
+    // Save all AI provider configs to app config via electronAPI
+    await window.electronAPI.updateAppConfig({
+      providers: toRaw(providers.value),
+    });
+    console.log("Saving AI provider configs:", providers.value);
     showStatus(t("settings.ai.messages.settingsSaved"), "success");
   } catch (error) {
     console.error("Failed to save AI provider configs:", error);
@@ -368,25 +258,11 @@ const showStatus = (message: string, type: "success" | "error") => {
 
 // Lifecycle
 onMounted(async () => {
+  // Fetch providers from store first
+  await aiProviderStore.fetchAiProviders();
+  // Then load provider config
   await loadProviderConfig();
 });
-
-// Watch for config changes and auto-save
-watch(
-  providers,
-  () => {
-    // Auto-save when any provider config changes
-    // Object.keys(providers.value).forEach((provider) => {
-    //   if (
-    //     providers.value[provider].apiKey ||
-    //     providers.value[provider].baseUrl
-    //   ) {
-    //     handleProviderChange(provider);
-    //   }
-    // });
-  },
-  { deep: true },
-);
 </script>
 
 <style scoped>

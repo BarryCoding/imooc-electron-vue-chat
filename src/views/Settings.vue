@@ -24,7 +24,7 @@ const activeTab = ref("common");
       </div>
 
       <!-- Tabs -->
-      <TabsRoot v-model:value="activeTab" class="w-full">
+      <TabsRoot v-model="activeTab" class="w-full">
         <TabsList
           class="grid w-full grid-cols-2 rounded-lg bg-gray-100 p-1 dark:bg-gray-800"
         >

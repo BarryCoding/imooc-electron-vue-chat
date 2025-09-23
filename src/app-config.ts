@@ -7,6 +7,20 @@ import type { AppConfig, ConfigUpdateProps } from "./types";
 export const DEFAULT_CONFIG: AppConfig = {
   language: "en",
   fontSize: 14,
+  providers: {
+    dashscope: {
+      apiKey: "",
+      baseUrl: "https://dashscope.aliyuncs.com/api/v1",
+    },
+    deepseek: {
+      apiKey: "",
+      baseUrl: "https://api.deepseek.com/v1",
+    },
+    anthropic: {
+      apiKey: "",
+      baseUrl: "https://api.anthropic.com/v1",
+    },
+  },
 };
 
 // Config file path
