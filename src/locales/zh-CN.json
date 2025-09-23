@@ -16,7 +16,9 @@
     "send": "发送",
     "yes": "是",
     "no": "否",
-    "ok": "确定"
+    "ok": "确定",
+    "delete": "删除",
+    "warning": "警告"
   },
   "settings": {
     "title": "设置",
@@ -119,7 +121,10 @@
     "typing": "正在输入...",
     "noMessages": "还没有消息。开始对话吧！",
     "selectModel": "选择模型",
-    "selectProvider": "选择AI提供商"
+    "selectProvider": "选择AI提供商",
+    "deleteChat": "删除聊天",
+    "deleteChatConfirm": "您确定要删除此聊天吗？此操作无法撤销。",
+    "deleteChatTitle": "删除聊天"
   },
   "home": {
     "title": "欢迎使用 Electron Chat",

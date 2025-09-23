@@ -21,6 +21,22 @@ export const useChatStore = defineStore("chat", () => {
     return id;
   }
 
+  async function deleteChat(chatId: number) {
+    // Delete all messages associated with this chat
+    await db.messages.where({ chatId }).delete();
+    // Delete the chat itself
+    await db.chats.delete(chatId);
+    // Remove from local state
+    const index = items.value.findIndex((item) => item.id === chatId);
+    if (index !== -1) {
+      items.value.splice(index, 1);
+    }
+    // Reset current chat if it was deleted
+    if (currentChatId.value === chatId) {
+      currentChatId.value = -1;
+    }
+  }
+
   return {
     items,
     currentChatId,
@@ -28,5 +44,6 @@ export const useChatStore = defineStore("chat", () => {
 
     createChat,
     fetchChats,
+    deleteChat,
   };
 });
