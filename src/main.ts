@@ -7,6 +7,7 @@ import fs from "node:fs/promises";
 import url from "node:url";
 import { createProvider } from "./ai-providers";
 import { loadConfig, updateConfig, resetConfig } from "./app-config";
+import { createAppMenu, setupMenuHandlers } from "./app-menu";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -116,7 +117,11 @@ const createWindow = async () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", () => {
+  createAppMenu();
+  setupMenuHandlers();
+  createWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
