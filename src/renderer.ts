@@ -28,5 +28,19 @@ router.beforeEach((to) => {
 });
 
 const pinia = createPinia();
+const app = createApp(App).use(router).use(pinia).use(i18n);
 
-createApp(App).use(router).use(pinia).use(i18n).mount("#app");
+// Set up menu IPC handlers
+if (window.electronAPI) {
+  // Handle "New Chat" menu item
+  window.electronAPI.onMenuNewChat(() => {
+    router.push("/");
+  });
+
+  // Handle "Open Settings" menu item
+  window.electronAPI.onMenuOpenSettings(() => {
+    router.push("/settings");
+  });
+}
+
+app.mount("#app");

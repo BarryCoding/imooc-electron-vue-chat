@@ -14,6 +14,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onUpdateMessage: (callback: OnUpdatedCallback) =>
     ipcRenderer.on("update-message", (_event, data) => callback(data)),
 
+  // Menu IPC handlers
+  onMenuNewChat: (callback: () => void) =>
+    ipcRenderer.on("menu-new-chat", callback),
+
+  onMenuOpenSettings: (callback: () => void) =>
+    ipcRenderer.on("menu-open-settings", callback),
+
   // utils
   getFilePath: (file: File) => webUtils.getPathForFile(file),
 
